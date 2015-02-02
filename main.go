@@ -53,6 +53,7 @@ func main() {
 		if err != nil {
 			log.Fatal(err)
 		}
+		defer f.Close()
 
 		js, err := ioutil.ReadAll(f)
 
