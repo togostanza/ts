@@ -8,18 +8,48 @@ import (
 	"log"
 	"net/http"
 	"os"
+	"path"
 	"path/filepath"
+	"strings"
 	"text/template"
 )
 
 type Stanza struct {
-	Name string
+	BaseDir string
+	Name    string
 }
 
-func NewStanza(name string) *Stanza {
-	return &Stanza{
-		Name: name,
+func NewStanza(baseDir, name string) *Stanza {
+	st := &Stanza{
+		BaseDir: baseDir,
+		Name:    name,
 	}
+	if !st.MetadataExists() {
+		return nil
+	}
+	// TODO: validate metadata
+
+	return st
+}
+
+func (st *Stanza) MetadataPath() string {
+	return path.Join(st.BaseDir, "metadata.json")
+}
+
+func (st *Stanza) MetadataExists() bool {
+	_, err := os.Stat(st.MetadataPath())
+	if err != nil {
+		return false
+	}
+	return true
+}
+
+func (st *Stanza) TemplateGlobPattern() string {
+	return path.Join(st.BaseDir, "templates/*")
+}
+
+func (st *Stanza) IndexJsPath() string {
+	return path.Join(st.BaseDir, "index.js")
 }
 
 func (st *Stanza) Generate(w io.Writer) error {
@@ -35,7 +65,7 @@ func (st *Stanza) Generate(w io.Writer) error {
 
 	templates := make(map[string]string)
 
-	paths, err := filepath.Glob("gene-attributes/templates/*")
+	paths, err := filepath.Glob(st.TemplateGlobPattern())
 
 	for _, path := range paths {
 		f, err := os.Open(path)
@@ -57,7 +87,7 @@ func (st *Stanza) Generate(w io.Writer) error {
 		return err
 	}
 
-	f, err := os.Open("gene-attributes/index.js")
+	f, err := os.Open(st.IndexJsPath())
 	if err != nil {
 		return err
 	}
@@ -75,7 +105,7 @@ func (st *Stanza) Generate(w io.Writer) error {
 	}{
 		TemplatesJson: string(buffer),
 		IndexJs:       string(js),
-		ElementName:   "togostanza-gene-attributes",
+		ElementName:   "togostanza-" + st.Name,
 	}
 
 	return tmpl.Execute(w, b)
@@ -83,17 +113,23 @@ func (st *Stanza) Generate(w io.Writer) error {
 
 func main() {
 	mux := http.NewServeMux()
-	assetsHandler := http.FileServer(http.Dir("."))
+	cwd, err := os.Getwd()
+	if err != nil {
+		log.Fatal(err)
+	}
+	assetsHandler := http.FileServer(http.Dir(cwd))
+
 	mux.HandleFunc("/", func(w http.ResponseWriter, req *http.Request) {
-		if req.URL.Path == "/gene-attributes/" {
-			st := NewStanza("gene-attributes")
-			err := st.Generate(w)
-			if err != nil {
-				log.Println("ERROR", err)
-				http.Error(w, "Internal server error", http.StatusInternalServerError)
-			}
-		} else {
+		stanzaName := strings.TrimSuffix(strings.TrimPrefix(req.URL.Path, "/"), "/")
+		st := NewStanza(path.Join(cwd, stanzaName), stanzaName)
+		if st == nil {
 			assetsHandler.ServeHTTP(w, req)
+			return
+		}
+		err := st.Generate(w)
+		if err != nil {
+			log.Println("ERROR", err)
+			http.Error(w, "Internal server error", http.StatusInternalServerError)
 		}
 	})
 
