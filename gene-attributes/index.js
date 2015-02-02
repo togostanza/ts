@@ -5,8 +5,8 @@ Stanza("togostanza-gene-attributes", function(params) {
     parameters: params
   }, function(rows) {
     rows.forEach(function(row) {
-      row.tax_link = "http://identifiers.org/taxonomy/" + row.taxid.value.split(":").slice(-1)[0];
-      row.refseq_link = "http://identifiers.org/refseq/" + row.refseq_label.value.split(":").slice(-1)[0];
+      row.tax_link = "http://identifiers.org/taxonomy/" + row.taxid.split(":").slice(-1)[0];
+      row.refseq_link = "http://identifiers.org/refseq/" + row.refseq_label.split(":").slice(-1)[0];
     });
     this.render({
       template: "stanza.html",
