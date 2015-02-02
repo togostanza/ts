@@ -87,6 +87,10 @@
         template:"stanza.rq",
         parameters: this
       }, function(rows) {
+        rows.forEach(function(row) {
+          row.tax_link = "http://identifiers.org/taxonomy/" + row.taxid.value.split(":").slice(-1)[0];
+          row.refseq_link = "http://identifiers.org/refseq/" + row.refseq_label.value.split(":").slice(-1)[0];
+        });
         this.render({
           template: "stanza.html",
           parameters: {
@@ -94,14 +98,6 @@
           }
         });
       });
-    },
-    refseqLink: function(refseqLabel) {
-      var components = refseqLabel.split(":");
-      return "http://identifiers.org/refseq/" + components[components.length - 1];
-    },
-    taxLink: function(taxid) {
-      var components = taxid.split(":");
-      return "http://identifiers.org/taxonomy/" + components[components.length - 1];
     }
   });
 </script>
