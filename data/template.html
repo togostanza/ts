@@ -8,8 +8,8 @@
 <main id="content"></main>
 </template>
 <script>
-  function Stanza(name, execute) {
-    Polymer(name, {
+  function Stanza(execute) {
+    Polymer("{{ .ElementName }}", {
       templates: {{ .TemplatesJson }},
       ready: function() {
         execute.bind(this)(this);

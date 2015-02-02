@@ -1,4 +1,4 @@
-Stanza("togostanza-gene-attributes", function(params) {
+Stanza(function(params) {
   this.query({
     endpoint: "http://togogenome.org/sparql",
     template: "stanza.rq",
