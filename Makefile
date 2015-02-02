@@ -1,5 +1,5 @@
 default: build
 
 build:
-	go-bindata data/...
+	go-bindata -nocompress data/...
 	go build -o togostanza .
