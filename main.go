@@ -10,11 +10,6 @@ import (
 	"text/template"
 )
 
-type Bindings struct {
-	TemplatesJson string
-	IndexJs       string
-}
-
 func main() {
 	f, err := os.Open("gene-attributes/index.html.erb")
 	if err != nil {
@@ -66,7 +61,10 @@ func main() {
 
 		js, err := ioutil.ReadAll(f)
 
-		b := Bindings{
+		b := struct {
+			TemplatesJson string
+			IndexJs       string
+		}{
 			TemplatesJson: string(buffer),
 			IndexJs:       string(js),
 		}
