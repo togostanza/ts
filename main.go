@@ -12,7 +12,17 @@ import (
 	"text/template"
 )
 
-func generate(w io.Writer) error {
+type Stanza struct {
+	Name string
+}
+
+func NewStanza(name string) *Stanza {
+	return &Stanza{
+		Name: name,
+	}
+}
+
+func (st *Stanza) Generate(w io.Writer) error {
 	data, err := Asset("data/template.html")
 	if err != nil {
 		return fmt.Errorf("asset not found")
@@ -72,7 +82,6 @@ func generate(w io.Writer) error {
 }
 
 func main() {
-
 	mux := http.NewServeMux()
 
 	mux.HandleFunc("/gene-attributes/", func(w http.ResponseWriter, req *http.Request) {
