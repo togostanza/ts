@@ -26,7 +26,7 @@
           },
           success: function(data) {
             var rows = data.results.bindings;
-            callback.bind(self)(rows)
+            callback.bind(self)(rows);
           },
           error: function(xhr, status, err) {
             // TODO
