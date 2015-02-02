@@ -12,18 +12,7 @@ import (
 )
 
 func main() {
-	f, err := os.Open("gene-attributes/index.html.erb")
-	if err != nil {
-		log.Fatal(err)
-	}
-	defer f.Close()
-
-	t, err := ioutil.ReadAll(f)
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	tmpl, err := template.New("index").Parse(string(t))
+	tmpl, err := template.New("index").Parse(TEMPLATE)
 	if err != nil {
 		log.Fatal(err)
 	}
