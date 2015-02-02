@@ -10,7 +10,7 @@
 <script>
   function Stanza(name, execute) {
     Polymer(name, {
-      templates: <%= templates_json %>,
+      templates: {{ .TemplatesJson }},
       ready: function() {
         execute.bind(this)(this);
       },
@@ -47,6 +47,6 @@
       }
     });
   }
-  <%= index_js %>
+{{ .IndexJs }}
 </script>
 </polymer-element>
