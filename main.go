@@ -82,19 +82,20 @@ func (st *Stanza) Generate(w io.Writer) error {
 }
 
 func main() {
-
 	mux := http.NewServeMux()
-
-	mux.HandleFunc("/stanza/", func(w http.ResponseWriter, req *http.Request) {
-		st := NewStanza("gene-attributes")
-		err := st.Generate(w)
-		if err != nil {
-			log.Println("ERROR", err)
-			http.Error(w, "Internal server error", http.StatusInternalServerError)
+	assetsHandler := http.FileServer(http.Dir("."))
+	mux.HandleFunc("/", func(w http.ResponseWriter, req *http.Request) {
+		if req.URL.Path == "/gene-attributes/" {
+			st := NewStanza("gene-attributes")
+			err := st.Generate(w)
+			if err != nil {
+				log.Println("ERROR", err)
+				http.Error(w, "Internal server error", http.StatusInternalServerError)
+			}
+		} else {
+			assetsHandler.ServeHTTP(w, req)
 		}
 	})
-
-	mux.Handle("/", http.FileServer(http.Dir(".")))
 
 	port := 8080
 	addr := fmt.Sprintf(":%d", port)
