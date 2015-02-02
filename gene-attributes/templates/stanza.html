@@ -1,40 +1,40 @@
 {{#if gene_attributes}}
-<table class="table">
-  <tbody>
-  <tr>
-    <th>Gene symbol</th>
-    <td>{{gene_attributes.gene_symbol.value}}</td>
-  </tr>
-  <tr>
-    <th>Locus tag</th>
-    <td>{{gene_attributes.locus_tag.value}}</td>
-  </tr>
-  <tr>
-    <th>Gene type</th>
-    <td>{{gene_attributes.gene_type_label.value}}</td>
-  </tr>
-  <tr>
-    <th>Organism</th>
-    <td><a href="{{gene_attributes.tax_link}}">{{gene_attributes.organism.value}}</a></td>
-  </tr>
-  <tr>
-    <th>RefSeq</th>
-    <td><a href="{{gene_attributes.refseq_link}}">{{gene_attributes.refseq_label.value}}</a></td>
-  </tr>
-  <tr>
-    <th>Position</th>
-    <td>{{gene_attributes.insdc_location.value}}</td>
-  </tr>
-  <tr>
-    <th>Strand</th>
-    <td>{{gene_attributes.stand.value}}</td>
-  </tr>
-  <tr>
-    <th>Length</th>
-    <td>{{gene_attributes.seq_length}}</td>
-  </tr>
-  </tbody>
-</table>
+  <table class="table">
+    <tbody>
+    <tr>
+      <th>Gene symbol</th>
+      <td>{{gene_attributes.gene_symbol.value}}</td>
+    </tr>
+    <tr>
+      <th>Locus tag</th>
+      <td>{{gene_attributes.locus_tag.value}}</td>
+    </tr>
+    <tr>
+      <th>Gene type</th>
+      <td>{{gene_attributes.gene_type_label.value}}</td>
+    </tr>
+    <tr>
+      <th>Organism</th>
+      <td><a href="{{gene_attributes.tax_link}}">{{gene_attributes.organism.value}}</a></td>
+    </tr>
+    <tr>
+      <th>RefSeq</th>
+      <td><a href="{{gene_attributes.refseq_link}}">{{gene_attributes.refseq_label.value}}</a></td>
+    </tr>
+    <tr>
+      <th>Position</th>
+      <td>{{gene_attributes.insdc_location.value}}</td>
+    </tr>
+    <tr>
+      <th>Strand</th>
+      <td>{{gene_attributes.stand.value}}</td>
+    </tr>
+    <tr>
+      <th>Length</th>
+      <td>{{gene_attributes.seq_length}}</td>
+    </tr>
+    </tbody>
+  </table>
 {{else}}
   No Data.
 {{/if}}
