@@ -59,9 +59,11 @@ func main() {
 		b := struct {
 			TemplatesJson string
 			IndexJs       string
+			ElementName   string
 		}{
 			TemplatesJson: string(buffer),
 			IndexJs:       string(js),
+			ElementName:   "togostanza-gene-attributes",
 		}
 		err = tmpl.Execute(w, b)
 		if err != nil {
