@@ -4,7 +4,7 @@
 <polymer-element name="togostanza-gene-attributes" attributes="gene_id">
 <template>
 <link rel="stylesheet" href="../assets/stanza.css">
-<div id="content"></div>
+<main id="content"></main>
 <template if="{{error}}">
 <p>[togostanza-gene-attributes] {{error}}</p>
 </template>
@@ -57,30 +57,41 @@
     attributeChanged: function(attrName, oldVal, newVal) {
       this.execute();
     },
-    execute: function() {
-      this.error = null;
-      var queryTemplate = Handlebars.compile(this.templates["stanza.rq"]);
-      var htmlTemplate = Handlebars.compile(this.templates["stanza.html"]);
-      var query = queryTemplate(this);
+    query: function(params, callback) {
+      var queryTemplate = Handlebars.compile(this.templates[params.template]);
+      var query = queryTemplate(params.parameters);
+
       $.ajax({
-        url: "http://togogenome.org/sparql",
+        url: params.endpoint,
         data: {
           format: "json",
           query: query
         },
         success: function(data) {
-          if (data.results.bindings.length == 0) {
-            this.error = 'not found; gene_id="' + this.gene_id + '"';
-          } else {
-            var htmlPartial = htmlTemplate({
-              gene_attributes: data.results.bindings[0]
-            });
-            this.$.content.innerHTML = htmlPartial;
-          }
+          callback.bind(this)(data)
         }.bind(this),
         error: function(xhr, status, err) {
-          this.error = "ajax error";
+          // TODO
         }.bind(this)
+      });
+    },
+    render: function(params) {
+      var htmlTemplate = Handlebars.compile(this.templates[params.template]);
+      var htmlPartial = htmlTemplate(params.parameters);
+      this.$.content.innerHTML = htmlPartial;
+    },
+    execute: function() {
+      this.query({
+        endpoint:"http://togogenome.org/sparql",
+        template:"stanza.rq",
+        parameters: this
+      }, function(data) {
+        this.render({
+          template: "stanza.html",
+          parameters: {
+            gene_attributes: data.results.bindings[0]
+          }
+        });
       });
     },
     refseqLink: function(refseqLabel) {
