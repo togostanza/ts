@@ -7,57 +7,57 @@
 <main id="content"></main>
 </template>
 <script>
-  Polymer('togostanza-gene-attributes', {
-    templates: <%= templates_json %>,
-    error: null,
-    ready: function() {
-      this.execute();
-    },
-    attributeChanged: function(attrName, oldVal, newVal) {
-      this.execute();
-    },
-    query: function(params, callback) {
-      var queryTemplate = Handlebars.compile(this.templates[params.template]);
-      var query = queryTemplate(params.parameters);
+  function Stanza(name, execute) {
+    Polymer(name, {
+      templates: <%= templates_json %>,
+      ready: function() {
+        execute.bind(this)(this);
+      },
+      query: function(params, callback) {
+        var self = this;
+        var queryTemplate = Handlebars.compile(this.templates[params.template]);
+        var query = queryTemplate(params.parameters);
 
-      $.ajax({
-        url: params.endpoint,
-        data: {
-          format: "json",
-          query: query
-        },
-        success: function(data) {
-          var rows = data.results.bindings;
-          callback.bind(this)(rows)
-        }.bind(this),
-        error: function(xhr, status, err) {
-          // TODO
-        }.bind(this)
-      });
-    },
-    render: function(params) {
-      var htmlTemplate = Handlebars.compile(this.templates[params.template]);
-      var htmlPartial = htmlTemplate(params.parameters);
-      this.$.content.innerHTML = htmlPartial;
-    },
-    execute: function() {
-      this.query({
-        endpoint: "http://togogenome.org/sparql",
-        template: "stanza.rq",
-        parameters: this
-      }, function(rows) {
-        rows.forEach(function(row) {
-          row.tax_link = "http://identifiers.org/taxonomy/" + row.taxid.value.split(":").slice(-1)[0];
-          row.refseq_link = "http://identifiers.org/refseq/" + row.refseq_label.value.split(":").slice(-1)[0];
-        });
-        this.render({
-          template: "stanza.html",
-          parameters: {
-            gene_attributes: rows[0]
+        $.ajax({
+          url: params.endpoint,
+          data: {
+            format: "json",
+            query: query
+          },
+          success: function(data) {
+            var rows = data.results.bindings;
+            callback.bind(self)(rows)
+          },
+          error: function(xhr, status, err) {
+            // TODO
           }
         });
+      },
+      render: function(params) {
+        var htmlTemplate = Handlebars.compile(this.templates[params.template]);
+        var htmlPartial = htmlTemplate(params.parameters);
+        this.$.content.innerHTML = htmlPartial;
+      }
+    });
+  }
+
+  Stanza("togostanza-gene-attributes", function(params) {
+    this.query({
+      endpoint: "http://togogenome.org/sparql",
+      template: "stanza.rq",
+      parameters: params
+    }, function(rows) {
+      rows.forEach(function(row) {
+        row.tax_link = "http://identifiers.org/taxonomy/" + row.taxid.value.split(":").slice(-1)[0];
+        row.refseq_link = "http://identifiers.org/refseq/" + row.refseq_label.value.split(":").slice(-1)[0];
       });
-    }
+      this.render({
+        template: "stanza.html",
+        parameters: {
+          gene_attributes: rows[0]
+        }
+      });
+    });
   });
 </script>
 </polymer-element>
