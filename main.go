@@ -12,7 +12,12 @@ import (
 )
 
 func main() {
-	tmpl, err := template.New("index").Parse(TEMPLATE)
+	data, err := Asset("data/template.html")
+	if err != nil {
+		log.Fatal("asset not found")
+	}
+
+	tmpl, err := template.New("index").Parse(string(data))
 	if err != nil {
 		log.Fatal(err)
 	}
