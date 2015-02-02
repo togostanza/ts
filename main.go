@@ -15,6 +15,7 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
+	defer f.Close()
 
 	t, err := ioutil.ReadAll(f)
 	if err != nil {
@@ -40,6 +41,7 @@ func main() {
 			if err != nil {
 				log.Fatal(err)
 			}
+			defer f.Close()
 
 			t, err := ioutil.ReadAll(f)
 			if err != nil {
