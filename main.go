@@ -75,5 +75,7 @@ func main() {
 	addr := fmt.Sprintf(":%d", port)
 	log.Println("listening on", addr)
 
-	http.ListenAndServe(addr, mux)
+	if err := http.ListenAndServe(addr, mux); err != nil {
+		log.Fatal(err)
+	}
 }
