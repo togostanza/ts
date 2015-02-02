@@ -85,7 +85,7 @@ func main() {
 
 	mux := http.NewServeMux()
 
-	mux.HandleFunc("/gene-attributes/", func(w http.ResponseWriter, req *http.Request) {
+	mux.HandleFunc("/stanza/", func(w http.ResponseWriter, req *http.Request) {
 		st := NewStanza("gene-attributes")
 		err := st.Generate(w)
 		if err != nil {
