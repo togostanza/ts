@@ -2,6 +2,7 @@ package main
 
 import (
 	"encoding/json"
+	"fmt"
 	"io/ioutil"
 	"log"
 	"net/http"
@@ -26,8 +27,6 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
-
-	log.Println(tmpl)
 
 	mux := http.NewServeMux()
 
@@ -78,5 +77,9 @@ func main() {
 
 	mux.Handle("/", http.FileServer(http.Dir(".")))
 
-	http.ListenAndServe(":8080", mux)
+	port := 8080
+	addr := fmt.Sprintf(":%d", port)
+	log.Println("listening on", addr)
+
+	http.ListenAndServe(addr, mux)
 }
