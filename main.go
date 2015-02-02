@@ -3,6 +3,7 @@ package main
 import (
 	"encoding/json"
 	"fmt"
+	"io"
 	"io/ioutil"
 	"log"
 	"net/http"
@@ -11,64 +12,74 @@ import (
 	"text/template"
 )
 
-func main() {
+func generate(w io.Writer) error {
 	data, err := Asset("data/template.html")
 	if err != nil {
-		log.Fatal("asset not found")
+		return fmt.Errorf("asset not found")
 	}
 
 	tmpl, err := template.New("index").Parse(string(data))
 	if err != nil {
-		log.Fatal(err)
+		return err
 	}
+
+	templates := make(map[string]string)
+
+	paths, err := filepath.Glob("gene-attributes/templates/*")
+
+	for _, path := range paths {
+		f, err := os.Open(path)
+		if err != nil {
+			return err
+		}
+		defer f.Close()
+
+		t, err := ioutil.ReadAll(f)
+		if err != nil {
+			return err
+		}
+
+		templates[filepath.Base(path)] = string(t)
+	}
+
+	buffer, err := json.Marshal(templates)
+	if err != nil {
+		return err
+	}
+
+	f, err := os.Open("gene-attributes/index.js")
+	if err != nil {
+		return err
+	}
+	defer f.Close()
+
+	js, err := ioutil.ReadAll(f)
+	if err != nil {
+		return err
+	}
+
+	b := struct {
+		TemplatesJson string
+		IndexJs       string
+		ElementName   string
+	}{
+		TemplatesJson: string(buffer),
+		IndexJs:       string(js),
+		ElementName:   "togostanza-gene-attributes",
+	}
+
+	return tmpl.Execute(w, b)
+}
+
+func main() {
 
 	mux := http.NewServeMux()
 
 	mux.HandleFunc("/gene-attributes/", func(w http.ResponseWriter, req *http.Request) {
-		templates := make(map[string]string)
-
-		paths, err := filepath.Glob("gene-attributes/templates/*")
-
-		for _, path := range paths {
-			f, err := os.Open(path)
-			if err != nil {
-				log.Fatal(err)
-			}
-			defer f.Close()
-
-			t, err := ioutil.ReadAll(f)
-			if err != nil {
-				log.Fatal(err)
-			}
-
-			templates[filepath.Base(path)] = string(t)
-		}
-
-		buffer, err := json.Marshal(templates)
+		err := generate(w)
 		if err != nil {
-			log.Fatal(err)
-		}
-
-		f, err := os.Open("gene-attributes/index.js")
-		if err != nil {
-			log.Fatal(err)
-		}
-		defer f.Close()
-
-		js, err := ioutil.ReadAll(f)
-
-		b := struct {
-			TemplatesJson string
-			IndexJs       string
-			ElementName   string
-		}{
-			TemplatesJson: string(buffer),
-			IndexJs:       string(js),
-			ElementName:   "togostanza-gene-attributes",
-		}
-		err = tmpl.Execute(w, b)
-		if err != nil {
-			log.Fatal(err)
+			log.Println("ERROR", err)
+			http.Error(w, "Internal server error", http.StatusInternalServerError)
 		}
 	})
 
