@@ -42,8 +42,8 @@
     },
     execute: function() {
       this.query({
-        endpoint:"http://togogenome.org/sparql",
-        template:"stanza.rq",
+        endpoint: "http://togogenome.org/sparql",
+        template: "stanza.rq",
         parameters: this
       }, function(rows) {
         rows.forEach(function(row) {
