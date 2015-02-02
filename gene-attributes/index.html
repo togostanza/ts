@@ -69,7 +69,8 @@
           query: query
         },
         success: function(data) {
-          callback.bind(this)(data)
+          var rows = data.results.bindings;
+          callback.bind(this)(rows)
         }.bind(this),
         error: function(xhr, status, err) {
           // TODO
@@ -86,11 +87,11 @@
         endpoint:"http://togogenome.org/sparql",
         template:"stanza.rq",
         parameters: this
-      }, function(data) {
+      }, function(rows) {
         this.render({
           template: "stanza.html",
           parameters: {
-            gene_attributes: data.results.bindings[0]
+            gene_attributes: rows[0]
           }
         });
       });
