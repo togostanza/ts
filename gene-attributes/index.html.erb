@@ -1,0 +1,96 @@
+<script src="//cdnjs.cloudflare.com/ajax/libs/polymer/0.5.2/polymer.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/handlebars.js/2.0.0/handlebars.min.js"></script>
+<polymer-element name="togostanza-gene-attributes" attributes="gene_id">
+<template>
+<link rel="stylesheet" href="../assets/stanza.css">
+<div id="content"></div>
+<template if="{{error}}">
+<p>[togostanza-gene-attributes] {{error}}</p>
+</template>
+<template if="{{gene_attributes}}">
+<table class="table">
+  <tbody>
+  <tr>
+    <th>Gene symbol</th>
+    <td>{{gene_attributes.gene_symbol.value}}</td>
+  </tr>
+  <tr>
+    <th>Locus tag</th>
+    <td>{{gene_attributes.locus_tag.value}}</td>
+  </tr>
+  <tr>
+    <th>Gene type</th>
+    <td>{{gene_attributes.gene_type_label.value}}</td>
+  </tr>
+  <tr>
+    <th>Organism</th>
+    <td><a href="{{taxLink(gene_attributes.taxid.value)}}">{{gene_attributes.organism.value}}</a></td>
+  </tr>
+  <tr>
+    <th>RefSeq</th>
+    <td><a href="{{refseqLink(gene_attributes.refseq_label.value)}}">{{gene_attributes.refseq_label.value}}</a></td>
+  </tr>
+  <tr>
+    <th>Position</th>
+    <td>{{gene_attributes.insdc_location.value}}</td>
+  </tr>
+  <tr>
+    <th>Strand</th>
+    <td>{{gene_attributes.stand.value}}</td>
+  </tr>
+  <tr>
+    <th>Length</th>
+    <td>{{gene_attributes.seq_length}}</td>
+  </tr>
+  </tbody>
+</table>
+</template>
+</template>
+<script>
+  Polymer('togostanza-gene-attributes', {
+    templates: <%= templates_json %>,
+    error: null,
+    ready: function() {
+      this.execute();
+    },
+    attributeChanged: function(attrName, oldVal, newVal) {
+      this.execute();
+    },
+    execute: function() {
+      this.error = null;
+      var queryTemplate = Handlebars.compile(this.templates["stanza.rq"]);
+      var htmlTemplate = Handlebars.compile(this.templates["stanza.html"]);
+      var query = queryTemplate(this);
+      $.ajax({
+        url: "http://togogenome.org/sparql",
+        data: {
+          format: "json",
+          query: query
+        },
+        success: function(data) {
+          if (data.results.bindings.length == 0) {
+            this.error = 'not found; gene_id="' + this.gene_id + '"';
+          } else {
+            var htmlPartial = htmlTemplate({
+              gene_attributes: data.results.bindings[0]
+            });
+            this.$.content.innerHTML = htmlPartial;
+          }
+        }.bind(this),
+        error: function(xhr, status, err) {
+          this.error = "ajax error";
+        }.bind(this)
+      });
+    },
+    refseqLink: function(refseqLabel) {
+      var components = refseqLabel.split(":");
+      return "http://identifiers.org/refseq/" + components[components.length - 1];
+    },
+    taxLink: function(taxid) {
+      var components = taxid.split(":");
+      return "http://identifiers.org/taxonomy/" + components[components.length - 1];
+    }
+  });
+</script>
+</polymer-element>
