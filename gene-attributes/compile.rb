@@ -15,5 +15,4 @@ index_js = File.read("index.js")
 
 erb_template = File.read("index.html.erb")
 
-puts "---"
 puts ERB.new(erb_template).result(binding)
