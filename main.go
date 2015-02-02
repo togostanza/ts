@@ -82,10 +82,12 @@ func (st *Stanza) Generate(w io.Writer) error {
 }
 
 func main() {
+
 	mux := http.NewServeMux()
 
 	mux.HandleFunc("/gene-attributes/", func(w http.ResponseWriter, req *http.Request) {
-		err := generate(w)
+		st := NewStanza("gene-attributes")
+		err := st.Generate(w)
 		if err != nil {
 			log.Println("ERROR", err)
 			http.Error(w, "Internal server error", http.StatusInternalServerError)
