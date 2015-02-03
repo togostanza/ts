@@ -12,12 +12,12 @@
     Polymer("{{.ElementName}}", {
       templates: {{.TemplatesJson}},
       ready: function() {
-        execute.bind(this)(this);
+        execute.bind(this)(this, this);
       },
       {{/* below is a workaround for attributeChanges is not called in some situations */}}
       {{range .Attributes}}
         {{.}}Changed: function(attrName, oldVal, newVal) {
-          execute.bind(this)(this);
+          execute.bind(this)(this, this);
         },
       {{end}}
       query: function(params) {
