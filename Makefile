@@ -1,5 +1,5 @@
-default: build
+default: install
 
-build:
+install:
 	go-bindata -nocompress data/...
-	go build -o ts .
+	go install .
