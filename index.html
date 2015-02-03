@@ -3,6 +3,8 @@
 <html>
 <head>
 <script src="/assets/components/webcomponentsjs/webcomponents.js"></script>
+<link rel="import" href="../assets/components/polymer/polymer.html">
+<link rel="import" href="../assets/components/core-selector/core-selector.html">
 <link rel="import" href="gene-attributes">
 <title>Gene Attributes</title>
 </head>
@@ -10,7 +12,23 @@
 
 Example:
 
-<togostanza-gene-attributes gene_id="slr0473"></togostanza-gene-attributes>
+<polymer-element name="demo-element" attributes="gene_id" noscript>
+<template>
+<style>
+.core-selected {
+  background: #eee;
+}
+</style>
+
+<core-selector valueattr="label" selected="{{gene_id}}">
+<div label="slr0473">slr0473</div>
+<div label="slr1311">slr1311</div>
+</core-selector>
+  <togostanza-gene-attributes gene_id="{{gene_id}}"></togostanza-gene-attributes>
+</template>
+</polymer-element>
+
+<demo-element gene_id="slr0473"></demo-element>
 
 </body>
 </html>

@@ -2,7 +2,7 @@
 <script src="../assets/components/jquery/dist/jquery.min.js"></script>
 <script src="../assets/components/handlebars/handlebars.min.js"></script>
 <script src="../assets/components/lodash/lodash.min.js"></script>
-<polymer-element name="{{ .ElementName }}" attributes="{{ .Attributes }}">
+<polymer-element name="{{ .ElementName }}" attributes="{{ .AttributesString }}">
 <template>
 <link rel="stylesheet" href="../assets/stanza.css">
 <main id="content"></main>
@@ -14,6 +14,11 @@
       ready: function() {
         execute.bind(this)(this);
       },
+      {{ range .Attributes }}
+        {{ . }}Changed: function(attrName, oldVal, newVal) {
+          execute.bind(this)(this);
+        },
+      {{ end }}
       query: function(params, callback) {
         var self = this;
         var queryTemplate = Handlebars.compile(this.templates[params.template]);

@@ -134,15 +134,17 @@ func (st *Stanza) Generate(w io.Writer) error {
 	}
 
 	b := struct {
-		TemplatesJson string
-		IndexJs       string
-		ElementName   string
-		Attributes    string
+		TemplatesJson    string
+		IndexJs          string
+		ElementName      string
+		AttributesString string
+		Attributes       []string
 	}{
-		TemplatesJson: string(buffer),
-		IndexJs:       string(js),
-		ElementName:   "togostanza-" + st.Name,
-		Attributes:    strings.Join(st.Metadata.ParameterKeys(), " "),
+		TemplatesJson:    string(buffer),
+		IndexJs:          string(js),
+		ElementName:      "togostanza-" + st.Name,
+		AttributesString: strings.Join(st.Metadata.ParameterKeys(), " "),
+		Attributes:       st.Metadata.ParameterKeys(),
 	}
 
 	return tmpl.Execute(w, b)
