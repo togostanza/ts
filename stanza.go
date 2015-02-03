@@ -14,19 +14,48 @@ import (
 type Stanza struct {
 	BaseDir string
 	Name    string
+	Metadata
 }
 
-func NewStanza(baseDir, name string) *Stanza {
+type Parameter struct {
+	Key string `json:"key"`
+}
+
+type Metadata struct {
+	Parameters []Parameter `json:"parameters"`
+}
+
+func LoadMetadata(metadataPath string) (*Metadata, error) {
+	f, err := os.Open(metadataPath)
+	if err != nil {
+		return nil, err
+	}
+	defer f.Close()
+
+	decoder := json.NewDecoder(f)
+	var meta Metadata
+	if err := decoder.Decode(&meta); err != nil {
+		return nil, err
+	}
+
+	return &meta, nil
+}
+
+func NewStanza(baseDir, name string) (*Stanza, error) {
 	st := &Stanza{
 		BaseDir: baseDir,
 		Name:    name,
 	}
 	if !st.MetadataExists() {
-		return nil
+		return nil, nil
 	}
-	// TODO: validate metadata
+	meta, err := LoadMetadata(st.MetadataPath())
+	if err != nil {
+		return nil, err
+	}
+	st.Metadata = *meta
 
-	return st
+	return st, nil
 }
 
 func (st *Stanza) MetadataPath() string {

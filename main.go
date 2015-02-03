@@ -19,13 +19,17 @@ func main() {
 
 	mux.HandleFunc("/", func(w http.ResponseWriter, req *http.Request) {
 		stanzaName := strings.TrimSuffix(strings.TrimPrefix(req.URL.Path, "/"), "/")
-		st := NewStanza(path.Join(cwd, stanzaName), stanzaName)
+		st, err := NewStanza(path.Join(cwd, stanzaName), stanzaName)
+		if err != nil {
+			log.Println("ERROR", err)
+			http.Error(w, "Internal server error", http.StatusInternalServerError)
+		}
 		if st == nil {
 			assetsHandler.ServeHTTP(w, req)
 			return
 		}
-		err := st.Generate(w)
-		if err != nil {
+		log.Println(st.Metadata)
+		if err := st.Generate(w); err != nil {
 			log.Println("ERROR", err)
 			http.Error(w, "Internal server error", http.StatusInternalServerError)
 		}
