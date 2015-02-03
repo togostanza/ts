@@ -3,7 +3,7 @@ Stanza(function(params) {
     endpoint: "http://togogenome.org/sparql",
     template: "stanza.rq",
     parameters: params
-  }, function(rows) {
+  }).done(function(rows) {
     rows.forEach(function(row) {
       row.sequence_length = row.sequence ? row.sequence.length : null;
 
@@ -25,5 +25,5 @@ Stanza(function(params) {
         attributes: rows
       }
     });
-  });
+  }.bind(this));
 });
