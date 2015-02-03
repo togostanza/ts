@@ -5,30 +5,27 @@ import (
 	"fmt"
 	"log"
 	"net/http"
-	"os"
 	"path"
 	"strings"
 )
 
 var flagPort int
+var flagStanzaBaseDir string
 
 func init() {
 	flag.IntVar(&flagPort, "port", 8080, "port to listen on")
+	flag.StringVar(&flagStanzaBaseDir, "stanza-base-dir", ".", "stanza base directory")
 }
 
 func main() {
 	flag.Parse()
 
 	mux := http.NewServeMux()
-	cwd, err := os.Getwd()
-	if err != nil {
-		log.Fatal(err)
-	}
-	assetsHandler := http.FileServer(http.Dir(cwd))
+	assetsHandler := http.FileServer(http.Dir(flagStanzaBaseDir))
 
 	mux.HandleFunc("/", func(w http.ResponseWriter, req *http.Request) {
 		stanzaName := strings.TrimSuffix(strings.TrimPrefix(req.URL.Path, "/"), "/")
-		st, err := NewStanza(path.Join(cwd, stanzaName), stanzaName)
+		st, err := NewStanza(path.Join(flagStanzaBaseDir, stanzaName), stanzaName)
 		if err != nil {
 			log.Println("ERROR", err)
 			http.Error(w, "Internal server error", http.StatusInternalServerError)
