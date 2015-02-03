@@ -87,6 +87,21 @@ func (st *Stanza) IndexJsPath() string {
 	return path.Join(st.BaseDir, "index.js")
 }
 
+func (st *Stanza) IndexJs() ([]byte, error) {
+	f, err := os.Open(st.IndexJsPath())
+	if err != nil {
+		return nil, err
+	}
+	defer f.Close()
+
+	js, err := ioutil.ReadAll(f)
+	if err != nil {
+		return nil, err
+	}
+
+	return js, nil
+}
+
 func (st *Stanza) Generate(w io.Writer) error {
 	data, err := Asset("data/template.html")
 	if err != nil {
@@ -122,13 +137,7 @@ func (st *Stanza) Generate(w io.Writer) error {
 		return err
 	}
 
-	f, err := os.Open(st.IndexJsPath())
-	if err != nil {
-		return err
-	}
-	defer f.Close()
-
-	js, err := ioutil.ReadAll(f)
+	indexJs, err := st.IndexJs()
 	if err != nil {
 		return err
 	}
@@ -141,7 +150,7 @@ func (st *Stanza) Generate(w io.Writer) error {
 		Attributes       []string
 	}{
 		TemplatesJson:    string(buffer),
-		IndexJs:          string(js),
+		IndexJs:          string(indexJs),
 		ElementName:      "togostanza-" + st.Name,
 		AttributesString: strings.Join(st.Metadata.ParameterKeys(), " "),
 		Attributes:       st.Metadata.ParameterKeys(),
