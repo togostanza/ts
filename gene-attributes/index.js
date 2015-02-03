@@ -8,6 +8,7 @@ Stanza(function(params) {
       row.tax_link = "http://identifiers.org/taxonomy/" + row.taxid.split(":").slice(-1)[0];
       row.refseq_link = "http://identifiers.org/refseq/" + row.refseq_label.split(":").slice(-1)[0];
     });
+
     this.render({
       template: "stanza.html",
       parameters: {
