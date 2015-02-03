@@ -1,8 +1,8 @@
-# togostanza-js
+# ts
 
 WIP
 
-## Development of togostanza-js
+## Development
 
 ```sh
 go get -u github.com/jteeuwen/go-bindata/...
