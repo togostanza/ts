@@ -1,0 +1,6 @@
+{
+  "name": "togostanza",
+  "dependencies": {
+    "polymer": "Polymer/polymer#~0.5.4"
+  }
+}
