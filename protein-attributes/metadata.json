@@ -1,0 +1,29 @@
+{
+  "stanza": "environment_attributes",
+  "label": "Environmental attributes",
+  "description": "Basic information of a environment ontology.",
+  "parameters": [
+    {
+      "key": "gene_id",
+      "example": "",
+      "description": "",
+      "required": true
+    },
+    {
+      "key": "tax_id",
+      "example": "",
+      "description": "",
+      "required": true
+    }
+  ],
+  "usage": "<iframe src=\"http://togogenome.org/stanza/environment_attributes?meo_id=MEO_0000006\"></iframe>",
+  "type": "Stanza",
+  "context": "Environment",
+  "display": "Table",
+  "provider": "Database Center for Life Science",
+  "license": "CC-BY",
+  "author": "Yoko Okabeppu",
+  "address": "hoge@example.org",
+  "created": "2015-02-03T01:22:36Z",
+  "updated": "2015-02-03T01:22:36Z"
+}

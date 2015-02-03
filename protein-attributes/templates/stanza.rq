@@ -1,0 +1,31 @@
+PREFIX up: <http://purl.uniprot.org/core/>
+PREFIX taxonomy: <http://purl.uniprot.org/taxonomy/>
+
+SELECT DISTINCT ?sequence ?fragment ?precursor ?existence_label
+WHERE {
+  <http://togogenome.org/gene/{{tax_id}}:{{gene_id}}> ?p ?id_upid .
+  ?id_upid rdfs:seeAlso ?protein .
+  ?protein a <http://purl.uniprot.org/core/Protein> ;
+    up:sequence ?seq .
+
+  # Sequence
+  OPTIONAL {
+    ?seq rdf:value ?sequence .
+  }
+
+  # Sequence status
+  OPTIONAL {
+    ?seq up:fragment ?fragment .
+  }
+
+  # Sequence processing
+  OPTIONAL {
+    ?seq up:precursor ?precursor .
+  }
+
+  # Protein existence
+  OPTIONAL {
+    ?protein up:existence ?existence .
+    ?existence rdfs:label ?existence_label .
+  }
+}
