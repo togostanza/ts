@@ -28,7 +28,6 @@ func main() {
 			assetsHandler.ServeHTTP(w, req)
 			return
 		}
-		log.Println(st.Metadata)
 		if err := st.Generate(w); err != nil {
 			log.Println("ERROR", err)
 			http.Error(w, "Internal server error", http.StatusInternalServerError)

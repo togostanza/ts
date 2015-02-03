@@ -8,6 +8,7 @@ import (
 	"os"
 	"path"
 	"path/filepath"
+	"strings"
 	"text/template"
 )
 
@@ -23,6 +24,14 @@ type Parameter struct {
 
 type Metadata struct {
 	Parameters []Parameter `json:"parameters"`
+}
+
+func (meta *Metadata) ParameterKeys() []string {
+	keys := make([]string, len(meta.Parameters))
+	for i, parameter := range meta.Parameters {
+		keys[i] = parameter.Key
+	}
+	return keys
 }
 
 func LoadMetadata(metadataPath string) (*Metadata, error) {
@@ -128,10 +137,12 @@ func (st *Stanza) Generate(w io.Writer) error {
 		TemplatesJson string
 		IndexJs       string
 		ElementName   string
+		Attributes    string
 	}{
 		TemplatesJson: string(buffer),
 		IndexJs:       string(js),
 		ElementName:   "togostanza-" + st.Name,
+		Attributes:    strings.Join(st.Metadata.ParameterKeys(), " "),
 	}
 
 	return tmpl.Execute(w, b)

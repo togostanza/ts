@@ -4,9 +4,9 @@
   "description": "Basic information of a environment ontology.",
   "parameters": [
     {
-      "key": "meo_id",
-      "example": "MEO_0000006",
-      "description": "MEO identifier. (e.g., MEO_0000006)",
+      "key": "gene_id",
+      "example": "",
+      "description": "",
       "required": true
     }
   ],
