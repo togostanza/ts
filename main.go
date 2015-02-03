@@ -1,6 +1,7 @@
 package main
 
 import (
+	"flag"
 	"fmt"
 	"log"
 	"net/http"
@@ -9,7 +10,15 @@ import (
 	"strings"
 )
 
+var flagPort int
+
+func init() {
+	flag.IntVar(&flagPort, "port", 8080, "port to listen on")
+}
+
 func main() {
+	flag.Parse()
+
 	mux := http.NewServeMux()
 	cwd, err := os.Getwd()
 	if err != nil {
@@ -34,8 +43,7 @@ func main() {
 		}
 	})
 
-	port := 8080
-	addr := fmt.Sprintf(":%d", port)
+	addr := fmt.Sprintf(":%d", flagPort)
 	log.Println("listening on", addr)
 
 	if err := http.ListenAndServe(addr, mux); err != nil {
