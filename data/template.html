@@ -2,24 +2,24 @@
 <script src="../assets/components/jquery/dist/jquery.min.js"></script>
 <script src="../assets/components/handlebars/handlebars.min.js"></script>
 <script src="../assets/components/lodash/lodash.min.js"></script>
-<polymer-element name="{{ .ElementName }}" attributes="{{ .AttributesString }}">
+<polymer-element name="{{.ElementName}}" attributes="{{.AttributesString}}">
 <template>
 <link rel="stylesheet" href="../assets/stanza.css">
 <main id="content"></main>
 </template>
 <script>
   function Stanza(execute) {
-    Polymer("{{ .ElementName }}", {
-      templates: {{ .TemplatesJson }},
+    Polymer("{{.ElementName}}", {
+      templates: {{.TemplatesJson}},
       ready: function() {
         execute.bind(this)(this);
       },
       {{/* below is a workaround for attributeChanges is not called in some situations */}}
-      {{ range .Attributes }}
-        {{ . }}Changed: function(attrName, oldVal, newVal) {
+      {{range .Attributes}}
+        {{.}}Changed: function(attrName, oldVal, newVal) {
           execute.bind(this)(this);
         },
-      {{ end }}
+      {{end}}
       query: function(params, callback) {
         var self = this;
         var queryTemplate = Handlebars.compile(this.templates[params.template]);
@@ -53,6 +53,6 @@
       }
     });
   }
-{{ .IndexJs }}
+{{.IndexJs}}
 </script>
 </polymer-element>
