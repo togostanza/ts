@@ -1,7 +1,7 @@
 <link rel="import" href="../assets/components/polymer/polymer.html">
-<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
-<script src="//cdnjs.cloudflare.com/ajax/libs/handlebars.js/2.0.0/handlebars.min.js"></script>
-<script src="//cdnjs.cloudflare.com/ajax/libs/lodash.js/2.4.1/lodash.min.js"></script>
+<script src="../assets/components/jquery/dist/jquery.min.js"></script>
+<script src="../assets/components/handlebars/handlebars.min.js"></script>
+<script src="../assets/components/lodash/lodash.min.js"></script>
 <polymer-element name="{{ .ElementName }}" attributes="{{ .Attributes }}">
 <template>
 <link rel="stylesheet" href="../assets/stanza.css">
@@ -28,7 +28,7 @@
           success: function(data) {
             var rows = data.results.bindings.map(function(row) {
               var rowOut = {};
-              _(row).forIn(function(value, key) {
+              _.forIn(row, function(value, key) {
                 rowOut[key] = value.value;
               });
               return rowOut;
