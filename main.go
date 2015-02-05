@@ -9,6 +9,8 @@ import (
 	"strings"
 )
 
+//go:generate go-bindata data/
+
 var flagPort int
 var flagStanzaBaseDir string
 

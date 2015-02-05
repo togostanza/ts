@@ -1,5 +1,5 @@
 default: install
 
 install:
-	go-bindata -nocompress data/...
+	go generate
 	go install .
