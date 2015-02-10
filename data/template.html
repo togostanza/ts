@@ -1,7 +1,6 @@
 <link rel="import" href="../assets/components/polymer/polymer.html">
 <script src="../assets/components/jquery/dist/jquery.min.js"></script>
 <script src="../assets/components/handlebars/handlebars.min.js"></script>
-<script src="../assets/components/lodash/lodash.min.js"></script>
 <polymer-element name="{{.ElementName}}" attributes="{{.AttributesString}}">
 <template>
 <link rel="stylesheet" href="../assets/stanza.css">
@@ -34,8 +33,8 @@
         }).then(function(data) {
           var rows = data.results.bindings.map(function(row) {
             var rowOut = {};
-            _.forIn(row, function(value, key) {
-              rowOut[key] = value.value;
+            Object.keys(row).forEach(function(key) {
+              rowOut[key] = row[key].value;
             });
             return rowOut;
           });
