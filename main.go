@@ -24,15 +24,14 @@ func main() {
 	mux := http.NewServeMux()
 	assetsHandler := http.FileServer(http.Dir(flagStanzaBaseDir))
 
-	sp := NewStanzaProvider(flagStanzaBaseDir)
+	sp, err := NewStanzaProvider(flagStanzaBaseDir)
+	if err != nil {
+		log.Fatal(err)
+	}
 
 	mux.HandleFunc("/", func(w http.ResponseWriter, req *http.Request) {
 		stanzaName := strings.TrimSuffix(strings.TrimPrefix(req.URL.Path, "/"), "/")
-		st, err := sp.Stanza(stanzaName)
-		if err != nil {
-			log.Println("ERROR", err)
-			http.Error(w, "Internal server error", http.StatusInternalServerError)
-		}
+		st := sp.Stanza(stanzaName)
 		if st == nil {
 			assetsHandler.ServeHTTP(w, req)
 			return
