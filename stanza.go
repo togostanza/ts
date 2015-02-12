@@ -106,7 +106,7 @@ func (st *Stanza) IndexJs() ([]byte, error) {
 	return js, nil
 }
 
-func (st *Stanza) Generate() error {
+func (st *Stanza) Build() error {
 	data, err := Asset("data/template.html")
 	if err != nil {
 		return fmt.Errorf("asset not found")

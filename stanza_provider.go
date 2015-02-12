@@ -46,12 +46,12 @@ func (sp *StanzaProvider) Load() error {
 	return nil
 }
 
-func (sp *StanzaProvider) Generate() error {
+func (sp *StanzaProvider) Build() error {
 	log.Println("building stanzas")
 	t0 := time.Now()
 	numBuilt := 0
 	for _, stanza := range sp.stanzas {
-		if err := stanza.Generate(); err != nil {
+		if err := stanza.Build(); err != nil {
 			return err
 		}
 		numBuilt++
