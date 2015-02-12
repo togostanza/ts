@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"log"
 	"net/http"
-	"path"
 	"strings"
 )
 
@@ -25,9 +24,11 @@ func main() {
 	mux := http.NewServeMux()
 	assetsHandler := http.FileServer(http.Dir(flagStanzaBaseDir))
 
+	sp := NewStanzaProvider(flagStanzaBaseDir)
+
 	mux.HandleFunc("/", func(w http.ResponseWriter, req *http.Request) {
 		stanzaName := strings.TrimSuffix(strings.TrimPrefix(req.URL.Path, "/"), "/")
-		st, err := NewStanza(path.Join(flagStanzaBaseDir, stanzaName), stanzaName)
+		st, err := sp.Stanza(stanzaName)
 		if err != nil {
 			log.Println("ERROR", err)
 			http.Error(w, "Internal server error", http.StatusInternalServerError)
