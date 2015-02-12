@@ -7,7 +7,7 @@ import (
 	"net/http"
 )
 
-//go:generate go-bindata data/
+//go:generate go-bindata data/ assets/...
 
 var flagPort int
 var flagStanzaBaseDir string
@@ -28,6 +28,11 @@ func main() {
 		log.Fatal(err)
 	}
 	if err := sp.Build(); err != nil {
+		log.Fatal(err)
+	}
+
+	log.Println("generating assets")
+	if err := RestoreAssets(flagStanzaBaseDir, "assets"); err != nil {
 		log.Fatal(err)
 	}
 
