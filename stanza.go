@@ -146,18 +146,25 @@ func (st *Stanza) Build() error {
 		return err
 	}
 
+	stylesheet, err := Asset("data/stanza.css")
+	if err != nil {
+		return err
+	}
+
 	b := struct {
 		TemplatesJson    string
 		IndexJs          string
 		ElementName      string
 		AttributesString string
 		Attributes       []string
+		Stylesheet       string
 	}{
 		TemplatesJson:    string(buffer),
 		IndexJs:          string(indexJs),
 		ElementName:      "togostanza-" + st.Name,
 		AttributesString: strings.Join(st.Metadata.ParameterKeys(), " "),
 		Attributes:       st.Metadata.ParameterKeys(),
+		Stylesheet:       string(stylesheet),
 	}
 
 	destPath := st.IndexHtmlPath()

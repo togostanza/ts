@@ -3,7 +3,9 @@
 <script src="../assets/components/handlebars/handlebars.min.js"></script>
 <polymer-element name="{{.ElementName}}" attributes="{{.AttributesString}}">
 <template>
-<link rel="stylesheet" href="../assets/stanza.css">
+<style>
+{{.Stylesheet}}
+</style>
 <main id="content"></main>
 </template>
 <script>
