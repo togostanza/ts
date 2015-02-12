@@ -3,8 +3,8 @@ package main
 import (
 	"encoding/json"
 	"fmt"
-	"io"
 	"io/ioutil"
+	"log"
 	"os"
 	"path"
 	"path/filepath"
@@ -87,6 +87,10 @@ func (st *Stanza) IndexJsPath() string {
 	return path.Join(st.BaseDir, "index.js")
 }
 
+func (st *Stanza) IndexHtmlPath() string {
+	return path.Join(st.BaseDir, "index.html")
+}
+
 func (st *Stanza) IndexJs() ([]byte, error) {
 	f, err := os.Open(st.IndexJsPath())
 	if err != nil {
@@ -102,7 +106,7 @@ func (st *Stanza) IndexJs() ([]byte, error) {
 	return js, nil
 }
 
-func (st *Stanza) Generate(w io.Writer) error {
+func (st *Stanza) Generate() error {
 	data, err := Asset("data/template.html")
 	if err != nil {
 		return fmt.Errorf("asset not found")
@@ -156,5 +160,18 @@ func (st *Stanza) Generate(w io.Writer) error {
 		Attributes:       st.Metadata.ParameterKeys(),
 	}
 
-	return tmpl.Execute(w, b)
+	destPath := st.IndexHtmlPath()
+	w, err := os.Create(destPath)
+	if err != nil {
+		return err
+	}
+	defer w.Close()
+
+	if err := tmpl.Execute(w, b); err != nil {
+		return err
+	}
+
+	log.Printf("generated %s", destPath)
+
+	return nil
 }

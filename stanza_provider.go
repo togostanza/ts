@@ -4,6 +4,7 @@ import (
 	"log"
 	"path"
 	"path/filepath"
+	"time"
 )
 
 type StanzaProvider struct {
@@ -33,7 +34,7 @@ func (sp *StanzaProvider) Load() error {
 	for _, stanzaMetadataPath := range stanzaMetadataPaths {
 		stanzaPath := filepath.Dir(stanzaMetadataPath)
 		stanzaName := filepath.Base(stanzaPath)
-		log.Printf("Loading stanza %s", stanzaPath)
+		log.Printf("loading stanza %s", stanzaPath)
 		stanza, err := NewStanza(path.Join(stanzaPath), stanzaName)
 		if err != nil {
 			return err
@@ -42,6 +43,20 @@ func (sp *StanzaProvider) Load() error {
 	}
 	sp.stanzas = stanzas
 
+	return nil
+}
+
+func (sp *StanzaProvider) Generate() error {
+	log.Println("building stanzas")
+	t0 := time.Now()
+	numBuilt := 0
+	for _, stanza := range sp.stanzas {
+		if err := stanza.Generate(); err != nil {
+			return err
+		}
+		numBuilt++
+	}
+	log.Printf("%d stanza(s) built in %s", numBuilt, time.Since(t0))
 	return nil
 }
 

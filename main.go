@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"log"
 	"net/http"
-	"strings"
 )
 
 //go:generate go-bindata data/
@@ -28,18 +27,12 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
+	if err := sp.Generate(); err != nil {
+		log.Fatal(err)
+	}
 
 	mux.HandleFunc("/", func(w http.ResponseWriter, req *http.Request) {
-		stanzaName := strings.TrimSuffix(strings.TrimPrefix(req.URL.Path, "/"), "/")
-		st := sp.Stanza(stanzaName)
-		if st == nil {
-			assetsHandler.ServeHTTP(w, req)
-			return
-		}
-		if err := st.Generate(w); err != nil {
-			log.Println("ERROR", err)
-			http.Error(w, "Internal server error", http.StatusInternalServerError)
-		}
+		assetsHandler.ServeHTTP(w, req)
 	})
 
 	addr := fmt.Sprintf(":%d", flagPort)
