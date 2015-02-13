@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"log"
 	"net/http"
-	"path"
 )
 
 var cmdServer = &Command{
@@ -21,22 +20,10 @@ func init() {
 }
 
 func runServer(cmd *Command, args []string) {
+	runBuild(nil, nil)
+
 	mux := http.NewServeMux()
 	assetsHandler := http.FileServer(http.Dir(flagStanzaBaseDir))
-
-	sp, err := NewStanzaProvider(flagStanzaBaseDir)
-	if err != nil {
-		log.Fatal(err)
-	}
-	if err := sp.Build(); err != nil {
-		log.Fatal(err)
-	}
-
-	assetsDir := "assets"
-	log.Printf("generating assets under %s", path.Join(flagStanzaBaseDir, assetsDir))
-	if err := RestoreAssets(flagStanzaBaseDir, assetsDir); err != nil {
-		log.Fatal(err)
-	}
 
 	mux.HandleFunc("/", func(w http.ResponseWriter, req *http.Request) {
 		assetsHandler.ServeHTTP(w, req)

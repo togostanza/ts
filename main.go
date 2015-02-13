@@ -30,6 +30,7 @@ func (c *Command) Usage() {
 }
 
 var commands = []*Command{
+	cmdBuild,
 	cmdServer,
 }
 
