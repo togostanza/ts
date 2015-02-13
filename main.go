@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+	"path"
 )
 
 //go:generate go-bindata data/ assets/...
@@ -31,8 +32,9 @@ func main() {
 		log.Fatal(err)
 	}
 
-	log.Println("generating assets")
-	if err := RestoreAssets(flagStanzaBaseDir, "assets"); err != nil {
+	assetsDir := "assets"
+	log.Printf("generating assets under %s", path.Join(flagStanzaBaseDir, assetsDir))
+	if err := RestoreAssets(flagStanzaBaseDir, assetsDir); err != nil {
 		log.Fatal(err)
 	}
 
