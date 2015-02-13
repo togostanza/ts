@@ -3,9 +3,10 @@ package main
 import (
 	"flag"
 	"fmt"
-	"log"
-	"net/http"
-	"path"
+	"io"
+	"os"
+	"strings"
+	"text/template"
 )
 
 //go:generate go-bindata data/ assets/...
@@ -13,39 +14,82 @@ import (
 var flagPort int
 var flagStanzaBaseDir string
 
-func init() {
-	flag.IntVar(&flagPort, "port", 8080, "port to listen on")
-	flag.StringVar(&flagStanzaBaseDir, "stanza-base-dir", ".", "stanza base directory")
+type Command struct {
+	Run       func(cmd *Command, args []string)
+	Name      string
+	Short     string
+	Long      string
+	UsageLine string
+	Flag      flag.FlagSet
+}
+
+func (c *Command) Usage() {
+	fmt.Fprintf(os.Stderr, "usage: %s\n\n", c.UsageLine)
+	fmt.Fprintf(os.Stderr, "%s\n", strings.TrimSpace(c.Long))
+	os.Exit(2)
+}
+
+var commands = []*Command{
+	cmdServer,
+}
+
+const usageTemplate = `Usage:
+
+	ts command [arguments]
+
+The commands are:
+{{range .}}
+	{{.Name | printf "%-10s"}} {{.Short}}{{end}}
+`
+
+var helpTemplate = `usage: ts {{.UsageLine}}
+
+{{.Long}}
+`
+
+func tmpl(w io.Writer, text string, data interface{}) {
+	t := template.New("top")
+	template.Must(t.Parse(text))
+	if err := t.Execute(w, data); err != nil {
+		panic(err)
+	}
+}
+
+func usage() {
+	tmpl(os.Stderr, usageTemplate, commands)
+	os.Exit(2)
 }
 
 func main() {
 	flag.Parse()
 
-	mux := http.NewServeMux()
-	assetsHandler := http.FileServer(http.Dir(flagStanzaBaseDir))
-
-	sp, err := NewStanzaProvider(flagStanzaBaseDir)
-	if err != nil {
-		log.Fatal(err)
-	}
-	if err := sp.Build(); err != nil {
-		log.Fatal(err)
+	args := flag.Args()
+	if len(args) < 1 {
+		usage()
 	}
 
-	assetsDir := "assets"
-	log.Printf("generating assets under %s", path.Join(flagStanzaBaseDir, assetsDir))
-	if err := RestoreAssets(flagStanzaBaseDir, assetsDir); err != nil {
-		log.Fatal(err)
+	if args[0] == "help" {
+		if len(args) == 1 {
+			usage()
+		}
+		arg := args[1]
+		for _, cmd := range commands {
+			if cmd.Name == arg {
+				tmpl(os.Stdout, helpTemplate, cmd)
+				os.Exit(2)
+			}
+		}
+		fmt.Fprintf(os.Stderr, "Unknown command %#q. Run 'ts help'\n", arg)
+		os.Exit(2)
 	}
 
-	mux.HandleFunc("/", func(w http.ResponseWriter, req *http.Request) {
-		assetsHandler.ServeHTTP(w, req)
-	})
-
-	addr := fmt.Sprintf(":%d", flagPort)
-	log.Println("listening on", addr)
-
-	if err := http.ListenAndServe(addr, mux); err != nil {
-		log.Fatal(err)
+	for _, cmd := range commands {
+		if cmd.Name == args[0] {
+			cmd.Flag.Usage = func() { cmd.Usage() }
+			cmd.Flag.Parse(args[1:])
+			args = cmd.Flag.Args()
+			cmd.Run(cmd, args)
+			os.Exit(0)
+		}
 	}
 }
