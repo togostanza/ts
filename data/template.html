@@ -22,7 +22,6 @@
         },
       {{end}}
       query: function(params) {
-        var self = this;
         var queryTemplate = Handlebars.compile(this.templates[params.template]);
         var query = queryTemplate(params.parameters);
 
