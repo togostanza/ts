@@ -3,8 +3,10 @@ package main
 import (
 	"fmt"
 	"log"
+	"os"
 	"path"
 	"path/filepath"
+	"text/template"
 	"time"
 )
 
@@ -48,6 +50,16 @@ func (sp *StanzaProvider) Load() error {
 }
 
 func (sp *StanzaProvider) Build() error {
+	if err := sp.buildStanzas(); err != nil {
+		return err
+	}
+	if err := sp.buildList(); err != nil {
+		return err
+	}
+	return nil
+}
+
+func (sp *StanzaProvider) buildStanzas() error {
 	log.Println("building stanzas")
 	t0 := time.Now()
 	numBuilt := 0
@@ -64,6 +76,52 @@ func (sp *StanzaProvider) Build() error {
 
 	log.Printf("%d stanza(s) built in %s", numBuilt, time.Since(t0))
 	return nil
+}
+
+func (sp *StanzaProvider) IndexPath() string {
+	return path.Join(sp.baseDir, "index.html")
+}
+
+func (sp *StanzaProvider) buildList() error {
+	data, err := Asset("data/list.html")
+	if err != nil {
+		return fmt.Errorf("asset list.html not found")
+	}
+	tmpl, err := template.New("list.html").Parse(string(data))
+	if err != nil {
+		return err
+	}
+
+	destPath := sp.IndexPath()
+	w, err := os.Create(destPath)
+	if err != nil {
+		return err
+	}
+	defer w.Close()
+
+	context := struct {
+		Stanzas []*Stanza
+	}{
+		Stanzas: sp.Stanzas(),
+	}
+
+	if err := tmpl.Execute(w, context); err != nil {
+		return err
+	}
+
+	log.Printf("generated %s", destPath)
+
+	return nil
+}
+
+func (sp *StanzaProvider) Stanzas() []*Stanza {
+	stanzas := make([]*Stanza, len(sp.stanzas))
+	i := 0
+	for _, stanza := range sp.stanzas {
+		stanzas[i] = stanza
+		i++
+	}
+	return stanzas
 }
 
 func (sp *StanzaProvider) Stanza(name string) *Stanza {

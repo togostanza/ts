@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <title>List of Stanzas</title>
+    <style>
+    </style>
+  </head>
+
+  <body>
+  <h1>List of Stanzas</h1>
+  <ul>{{range .Stanzas}}
+    <li>{{.Name|html}} (<a href="{{.Name|html}}/help.html">help</a>)</li>{{end}}
+  </ul>
+  </body>
+</html>

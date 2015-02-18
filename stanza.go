@@ -245,5 +245,7 @@ func (st *Stanza) buildHelpHtml() error {
 		return err
 	}
 
+	log.Printf("generated %s", destPath)
+
 	return nil
 }
