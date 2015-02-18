@@ -26,10 +26,11 @@ type Parameter struct {
 }
 
 type Metadata struct {
-	Id         string      `json:"@id"`
-	Label      string      `json:"label"`
-	Parameters []Parameter `json:"parameters"`
-	Usage      string      `json:"usage"`
+	Id          string      `json:"@id"`
+	Label       string      `json:"label"`
+	Parameters  []Parameter `json:"parameters"`
+	Description string      `json:"description"`
+	Usage       string      `json:"usage"`
 }
 
 func (meta *Metadata) ParameterKeys() []string {
