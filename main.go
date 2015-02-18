@@ -62,6 +62,7 @@ func usage() {
 }
 
 func main() {
+	flag.Usage = usage
 	flag.Parse()
 
 	args := flag.Args()
