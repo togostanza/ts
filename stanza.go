@@ -102,6 +102,10 @@ func (st *Stanza) HelpHtmlPath() string {
 	return path.Join(st.BaseDir, "help.html")
 }
 
+func (st *Stanza) ElementName() string {
+	return "togostanza-" + st.Name
+}
+
 func (st *Stanza) IndexJs() ([]byte, error) {
 	f, err := os.Open(st.IndexJsPath())
 	if err != nil {
@@ -182,7 +186,7 @@ func (st *Stanza) buildIndexHtml() error {
 	}{
 		TemplatesJson:    string(buffer),
 		IndexJs:          string(indexJs),
-		ElementName:      "togostanza-" + st.Name,
+		ElementName:      st.ElementName(),
 		AttributesString: strings.Join(st.Metadata.ParameterKeys(), " "),
 		Attributes:       st.Metadata.ParameterKeys(),
 		Stylesheet:       string(stylesheet),
