@@ -22,7 +22,7 @@
         },
       {{end}}
       query: function(params) {
-        var queryTemplate = Handlebars.compile(this.templates[params.template]);
+        var queryTemplate = Handlebars.compile(this.templates[params.template], {noEscape: true});
         var query = queryTemplate(params.parameters);
 
         return $.ajax({
