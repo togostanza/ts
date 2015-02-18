@@ -5,6 +5,9 @@
     <script src="/assets/components/webcomponentsjs/webcomponents.js"></script>
     <link rel="import" href="../{{.Name}}">
     <title>{{.Metadata.Label|html}}</title>
+    <style>
+      {{.Stylesheet}}
+    </style>
   </head>
 
   <body>
@@ -13,7 +16,7 @@
 
   <h2>Parameters</h2>
 
-  <table>
+  <table class="table">
     <tbody>
     <tr>
       <th>
@@ -49,7 +52,7 @@
   </table>
 
   <h2>Usage</h2>
-  {{.Metadata.Usage|html}}
+  <pre>{{.Metadata.Usage|html}}</pre>
 
   <h2>Sample</h2>
   {{.Metadata.Usage}}

@@ -209,6 +209,11 @@ func (st *Stanza) buildHelpHtml() error {
 		return fmt.Errorf("asset not found")
 	}
 
+	stylesheet, err := Asset("data/stanza.css")
+	if err != nil {
+		return err
+	}
+
 	tmpl, err := template.New("help.html").Parse(string(data))
 	if err != nil {
 		return err
@@ -222,11 +227,13 @@ func (st *Stanza) buildHelpHtml() error {
 	defer w.Close()
 
 	context := struct {
-		Name     string
-		Metadata Metadata
+		Name       string
+		Metadata   Metadata
+		Stylesheet string
 	}{
-		Name:     st.Name,
-		Metadata: st.Metadata,
+		Name:       st.Name,
+		Metadata:   st.Metadata,
+		Stylesheet: string(stylesheet),
 	}
 
 	if err := tmpl.Execute(w, context); err != nil {
