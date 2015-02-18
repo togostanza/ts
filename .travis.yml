@@ -22,6 +22,6 @@ deploy:
     - $TRAVIS_TAG/ts_${TRAVIS_TAG}_windows_386.zip
     - $TRAVIS_TAG/ts_${TRAVIS_TAG}_windows_amd64.zip
   on:
-    repo: darashi/ts
+    repo: togostanza/ts
     tags: true
     go: 1.4.2
