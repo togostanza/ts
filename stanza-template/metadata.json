@@ -7,5 +7,6 @@
       "description": "name to greet",
       "required": true
     }
-  ]
+  ],
+  "usage": "<togostanza-{{.Name}} name=\"Stanza Togo\"></togostanza-{{.Name}}>"
 }

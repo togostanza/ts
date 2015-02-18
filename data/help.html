@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <script src="/assets/components/webcomponentsjs/webcomponents.js"></script>
+    <link rel="import" href="../{{.Name}}">
+    <title>{{.Metadata.Label|html}}</title>
+    <style>
+      {{.Stylesheet}}
+    </style>
+  </head>
+
+  <body>
+
+  <h1>{{.Metadata.Label|html}}</h1>
+
+  <p>{{.Metadata.Description|html}}</p>
+
+  <h2>Parameters</h2>
+
+  <table class="table">
+    <tbody>
+    <tr>
+      <th>
+        Required
+      </th>
+      <th>
+        Key
+      </th>
+      <th>
+        Description
+      </th>
+      <th>
+        Example
+      </th>
+    </tr>
+    <tr>
+      {{range .Metadata.Parameters}}
+      <td>
+        {{.Required}}
+      </td>
+      <td>
+        {{.Key|html}}
+      </td>
+      <td>
+        {{.Description|html}}
+      </td>
+      <td>
+        {{.Example|html}}
+      </td>
+      {{end}}
+    </tr>
+    </tbody>
+  </table>
+
+  <h2>Usage</h2>
+  <pre>{{.Metadata.Usage|html}}</pre>
+
+  <h2>Sample</h2>
+  {{.Metadata.Usage}}
+
+  </body>
+</html>

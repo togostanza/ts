@@ -19,11 +19,18 @@ type Stanza struct {
 }
 
 type Parameter struct {
-	Key string `json:"key"`
+	Key         string `json:"key"`
+	Description string `json:"description"`
+	Example     string `json:"example"`
+	Required    bool   `json:"required"`
 }
 
 type Metadata struct {
-	Parameters []Parameter `json:"parameters"`
+	Id          string      `json:"@id"`
+	Label       string      `json:"label"`
+	Parameters  []Parameter `json:"parameters"`
+	Description string      `json:"description"`
+	Usage       string      `json:"usage"`
 }
 
 func (meta *Metadata) ParameterKeys() []string {
@@ -91,6 +98,10 @@ func (st *Stanza) IndexHtmlPath() string {
 	return path.Join(st.BaseDir, "index.html")
 }
 
+func (st *Stanza) HelpHtmlPath() string {
+	return path.Join(st.BaseDir, "help.html")
+}
+
 func (st *Stanza) IndexJs() ([]byte, error) {
 	f, err := os.Open(st.IndexJsPath())
 	if err != nil {
@@ -107,6 +118,16 @@ func (st *Stanza) IndexJs() ([]byte, error) {
 }
 
 func (st *Stanza) Build() error {
+	if err := st.buildIndexHtml(); err != nil {
+		return err
+	}
+	if err := st.buildHelpHtml(); err != nil {
+		return err
+	}
+	return nil
+}
+
+func (st *Stanza) buildIndexHtml() error {
 	data, err := Asset("data/template.html")
 	if err != nil {
 		return fmt.Errorf("asset not found")
@@ -179,6 +200,46 @@ func (st *Stanza) Build() error {
 	}
 
 	log.Printf("generated %s", destPath)
+
+	return nil
+}
+
+func (st *Stanza) buildHelpHtml() error {
+	data, err := Asset("data/help.html")
+	if err != nil {
+		return fmt.Errorf("asset not found")
+	}
+
+	stylesheet, err := Asset("data/stanza.css")
+	if err != nil {
+		return err
+	}
+
+	tmpl, err := template.New("help.html").Parse(string(data))
+	if err != nil {
+		return err
+	}
+
+	destPath := st.HelpHtmlPath()
+	w, err := os.Create(destPath)
+	if err != nil {
+		return err
+	}
+	defer w.Close()
+
+	context := struct {
+		Name       string
+		Metadata   Metadata
+		Stylesheet string
+	}{
+		Name:       st.Name,
+		Metadata:   st.Metadata,
+		Stylesheet: string(stylesheet),
+	}
+
+	if err := tmpl.Execute(w, context); err != nil {
+		return err
+	}
 
 	return nil
 }
