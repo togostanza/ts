@@ -8,7 +8,7 @@
 
 ## Installation
 
-Download latest release binary from https://github.com/darashi/ts/releases (TODO: use togostanza official repository). Extract the archive and put `ts` binary into the directory that is in your `PATH`.
+Download latest release binary from https://github.com/togostanza/ts/releases. Extract the archive and put `ts` binary into the directory that is in your `PATH`.
 
 ## Usage
 
