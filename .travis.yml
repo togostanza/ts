@@ -1,17 +1,19 @@
 language: go
-
 sudo: false
-
 go:
-  - 1.4
-
+- 1.4
 install:
-  - npm install -g bower
-  - go get github.com/jteeuwen/go-bindata/...
-  - go get github.com/laher/goxc
-
-
+- npm install -g bower
+- go get github.com/jteeuwen/go-bindata/...
+- go get github.com/laher/goxc
 script:
-  - bower install
-  - go generate
-  - goxc -d .
+- bower install
+- go generate
+- goxc -d .
+deploy:
+  provider: releases
+  api_key:
+    secure: rhHF2pl5nucDEt0/pD4nkQGGll1VY8ftxuquTeJo6ybNgpCE9U/jx/hRLSZK2ldztsgD/WRzZCqYEJiCloPvyI32tSe75EwifIULeYyNdlspPi80jj5U6RhnBLlHD4q5Nu+izNe68iU1qjrQIkTIlCFmrzLQVn6LECh1TX4jXAg=
+  file: snapshot/ts_darwin_amd64.zip
+  on:
+    repo: darashi/ts
