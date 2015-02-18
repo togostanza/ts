@@ -128,7 +128,7 @@ func (st *Stanza) Build() error {
 }
 
 func (st *Stanza) buildIndexHtml() error {
-	data, err := Asset("data/template.html")
+	data, err := Asset("data/index.html")
 	if err != nil {
 		return fmt.Errorf("asset not found")
 	}
