@@ -93,4 +93,7 @@ func main() {
 			os.Exit(0)
 		}
 	}
+
+	fmt.Fprintf(os.Stderr, "Unknown command %#q. Run 'ts help'\n", args[0])
+	os.Exit(2)
 }
