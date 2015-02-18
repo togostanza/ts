@@ -8,8 +8,10 @@ go:
 install:
   - npm install -g bower
   - go get github.com/jteeuwen/go-bindata/...
+  - go get github.com/laher/goxc
+
 
 script:
   - bower install
   - go generate
-  - go build
+  - goxc -d .
