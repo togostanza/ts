@@ -3,7 +3,7 @@
   "parameters": [
     {
       "key": "name",
-      "example": "togo",
+      "example": "Stanza Togo",
       "description": "name to greet",
       "required": true
     }
