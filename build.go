@@ -3,6 +3,7 @@ package main
 import (
 	"log"
 	"path"
+	"path/filepath"
 )
 
 var cmdBuild = &Command{
@@ -14,7 +15,11 @@ var cmdBuild = &Command{
 }
 
 func addBuildFlags(cmd *Command) {
-	cmd.Flag.StringVar(&flagStanzaBaseDir, "stanza-base-dir", ".", "stanza base directory")
+	path := "."
+	if absolutePath, err := filepath.Abs(path); err == nil {
+		path = absolutePath
+	}
+	cmd.Flag.StringVar(&flagStanzaBaseDir, "stanza-base-dir", path, "stanza base directory")
 }
 
 func init() {
