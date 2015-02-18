@@ -34,8 +34,8 @@
         Example
       </th>
     </tr>
+    {{range .Metadata.Parameters}}
     <tr>
-      {{range .Metadata.Parameters}}
       <td>
         {{.Required}}
       </td>
@@ -48,8 +48,8 @@
       <td>
         {{.Example|html}}
       </td>
-      {{end}}
     </tr>
+    {{end}}
     </tbody>
   </table>
 
