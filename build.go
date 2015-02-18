@@ -13,8 +13,12 @@ var cmdBuild = &Command{
 	Long:      "Build stanza provider",
 }
 
+func addBuildFlags(cmd *Command) {
+	cmd.Flag.StringVar(&flagStanzaBaseDir, "stanza-base-dir", ".", "stanza base directory")
+}
+
 func init() {
-	cmdBuild.Flag.StringVar(&flagStanzaBaseDir, "stanza-base-dir", ".", "stanza base directory")
+	addBuildFlags(cmdBuild)
 }
 
 func runBuild(cmd *Command, args []string) {

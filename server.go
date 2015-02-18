@@ -16,7 +16,7 @@ var cmdServer = &Command{
 
 func init() {
 	cmdServer.Flag.IntVar(&flagPort, "port", 8080, "port to listen on")
-	cmdServer.Flag.StringVar(&flagStanzaBaseDir, "stanza-base-dir", ".", "stanza base directory")
+	addBuildFlags(cmdServer)
 }
 
 func runServer(cmd *Command, args []string) {
