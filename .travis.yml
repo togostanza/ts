@@ -24,4 +24,4 @@ deploy:
   on:
     repo: darashi/ts
     tags: true
-    condition: "$TRAVIS_GO_VERSION == 1.4.1"
+    condition: "$TRAVIS_GO_VERSION = 1.4.1"
