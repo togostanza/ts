@@ -15,7 +15,13 @@ deploy:
   provider: releases
   api_key:
     secure: rhHF2pl5nucDEt0/pD4nkQGGll1VY8ftxuquTeJo6ybNgpCE9U/jx/hRLSZK2ldztsgD/WRzZCqYEJiCloPvyI32tSe75EwifIULeYyNdlspPi80jj5U6RhnBLlHD4q5Nu+izNe68iU1qjrQIkTIlCFmrzLQVn6LECh1TX4jXAg=
-  file: snapshot/ts_darwin_amd64.zip
+  file:
+    - snapshot/ts_darwin_386.zip
+    - snapshot/ts_darwin_amd64.zip
+    - snapshot/ts_linux_386.tar.gz
+    - snapshot/ts_linux_amd64.tar.gz
+    - snapshot/ts_windows_386.zip
+    - snapshot/ts_windows_amd64.zip
   on:
     repo: darashi/ts
     tags: true
