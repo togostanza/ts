@@ -1,4 +1,6 @@
 # ts
+ [![Build Status](https://travis-ci.org/togostanza/ts.svg?branch=master)](https://travis-ci.org/togostanza/ts)
+
 
 `ts` is a command to build TogoStanza stanzas of JavaScript backended version. It includes:
 
