@@ -1,7 +1,6 @@
 language: go
 sudo: false
 go:
-- 1.4
 - 1.4.1
 install:
 - npm install -g bower
