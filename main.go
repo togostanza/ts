@@ -9,7 +9,7 @@ import (
 	"text/template"
 )
 
-//go:generate go-bindata data/ assets/...
+//go:generate go-bindata data/ assets/... stanza-template/...
 
 var flagPort int
 var flagStanzaBaseDir string
@@ -32,6 +32,7 @@ func (c *Command) Usage() {
 var commands = []*Command{
 	cmdBuild,
 	cmdServer,
+	cmdNew,
 }
 
 const usageTemplate = `Usage:

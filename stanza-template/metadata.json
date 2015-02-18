@@ -1,0 +1,11 @@
+{
+  "stanza": "{{.Name|js}}",
+  "parameters": [
+    {
+      "key": "name",
+      "example": "togo",
+      "description": "name to greet",
+      "required": true
+    }
+  ]
+}

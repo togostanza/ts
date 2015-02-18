@@ -16,7 +16,10 @@ Download latest release binary from https://github.com/togostanza/ts/releases. E
 
 ### Scaffold
 
-TODO: write
+```
+ts new my-stanza
+```
+
 
 ### Build
 
