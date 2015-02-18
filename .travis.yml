@@ -6,6 +6,7 @@ go:
   - 1.4
 
 install:
+  - npm install -g bower
   - go get github.com/jteeuwen/go-bindata/...
 
 script:
