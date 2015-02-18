@@ -17,3 +17,4 @@ deploy:
   file: snapshot/ts_darwin_amd64.zip
   on:
     repo: darashi/ts
+    tags: true
