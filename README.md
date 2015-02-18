@@ -21,13 +21,13 @@ TODO: write
 ### Build
 
 ```
-  ts build
+ts build
 ```
 
 ### Serve
 
 ```
-  ts server
+ts server
 ```
 
 ## Development
