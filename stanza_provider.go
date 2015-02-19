@@ -49,22 +49,27 @@ func (sp *StanzaProvider) Load() error {
 	return nil
 }
 
-func (sp *StanzaProvider) Build() error {
-	if err := sp.buildStanzas(); err != nil {
+func (sp *StanzaProvider) Build(distDir string) error {
+	if err := os.MkdirAll(distDir, os.FileMode(0755)); err != nil {
 		return err
 	}
-	if err := sp.buildList(); err != nil {
+
+	if err := sp.buildStanzas(distDir); err != nil {
+		return err
+	}
+	if err := sp.buildList(distDir); err != nil {
 		return err
 	}
 	return nil
 }
 
-func (sp *StanzaProvider) buildStanzas() error {
+func (sp *StanzaProvider) buildStanzas(distDir string) error {
 	log.Println("building stanzas")
 	t0 := time.Now()
 	numBuilt := 0
-	for _, stanza := range sp.stanzas {
-		if err := stanza.Build(); err != nil {
+	for name, stanza := range sp.stanzas {
+		destStanzaBase := path.Join(distDir, name)
+		if err := stanza.Build(destStanzaBase); err != nil {
 			return err
 		}
 		numBuilt++
@@ -78,11 +83,7 @@ func (sp *StanzaProvider) buildStanzas() error {
 	return nil
 }
 
-func (sp *StanzaProvider) IndexPath() string {
-	return path.Join(sp.baseDir, "index.html")
-}
-
-func (sp *StanzaProvider) buildList() error {
+func (sp *StanzaProvider) buildList(distDir string) error {
 	data, err := Asset("data/list.html")
 	if err != nil {
 		return fmt.Errorf("asset list.html not found")
@@ -92,7 +93,7 @@ func (sp *StanzaProvider) buildList() error {
 		return err
 	}
 
-	destPath := sp.IndexPath()
+	destPath := path.Join(distDir, "index.html")
 	w, err := os.Create(destPath)
 	if err != nil {
 		return err

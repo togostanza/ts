@@ -31,13 +31,14 @@ func runBuild(cmd *Command, args []string) {
 	if err != nil {
 		log.Fatal(err)
 	}
-	if err := sp.Build(); err != nil {
+	distPath := path.Join(flagStanzaBaseDir, "dist")
+	if err := sp.Build(distPath); err != nil {
 		log.Fatal(err)
 	}
 
 	assetsDir := "assets"
-	log.Printf("generating assets under %s", path.Join(flagStanzaBaseDir, assetsDir))
-	if err := RestoreAssets(flagStanzaBaseDir, assetsDir); err != nil {
+	log.Printf("generating assets under %s", path.Join(distPath, assetsDir))
+	if err := RestoreAssets(distPath, assetsDir); err != nil {
 		log.Fatal(err)
 	}
 }

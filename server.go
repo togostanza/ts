@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+	"path"
 )
 
 var cmdServer = &Command{
@@ -23,7 +24,8 @@ func runServer(cmd *Command, args []string) {
 	runBuild(nil, nil)
 
 	mux := http.NewServeMux()
-	assetsHandler := http.FileServer(http.Dir(flagStanzaBaseDir))
+	distPath := path.Join(flagStanzaBaseDir, "dist")
+	assetsHandler := http.FileServer(http.Dir(distPath))
 
 	mux.HandleFunc("/", func(w http.ResponseWriter, req *http.Request) {
 		assetsHandler.ServeHTTP(w, req)

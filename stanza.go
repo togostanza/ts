@@ -3,6 +3,7 @@ package main
 import (
 	"encoding/json"
 	"fmt"
+	"io"
 	"io/ioutil"
 	"log"
 	"os"
@@ -94,12 +95,24 @@ func (st *Stanza) IndexJsPath() string {
 	return path.Join(st.BaseDir, "index.js")
 }
 
-func (st *Stanza) IndexHtmlPath() string {
-	return path.Join(st.BaseDir, "index.html")
+func (st *Stanza) AssetsDir() string {
+	return path.Join(st.BaseDir, "assets")
 }
 
-func (st *Stanza) HelpHtmlPath() string {
-	return path.Join(st.BaseDir, "help.html")
+func (st *Stanza) DestMetadataPath(destStanzaBase string) string {
+	return path.Join(destStanzaBase, "metadata.json")
+}
+
+func (st *Stanza) DestIndexHtmlPath(destStanzaBase string) string {
+	return path.Join(destStanzaBase, "index.html")
+}
+
+func (st *Stanza) DestHelpHtmlPath(destStanzaBase string) string {
+	return path.Join(destStanzaBase, "help.html")
+}
+
+func (st *Stanza) DestAssetsDir(destStanzaBase string) string {
+	return path.Join(destStanzaBase, "assets")
 }
 
 func (st *Stanza) ElementName() string {
@@ -121,17 +134,80 @@ func (st *Stanza) IndexJs() ([]byte, error) {
 	return js, nil
 }
 
-func (st *Stanza) Build() error {
-	if err := st.buildIndexHtml(); err != nil {
+func (st *Stanza) Build(destStanzaBase string) error {
+	if err := os.MkdirAll(destStanzaBase, os.FileMode(0755)); err != nil {
 		return err
 	}
-	if err := st.buildHelpHtml(); err != nil {
+	if err := st.buildIndexHtml(destStanzaBase); err != nil {
+		return err
+	}
+	if err := st.buildHelpHtml(destStanzaBase); err != nil {
+		return err
+	}
+	if err := st.copyMetadataJson(destStanzaBase); err != nil {
+		return err
+	}
+	if err := st.copyAssets(destStanzaBase); err != nil {
 		return err
 	}
 	return nil
 }
 
-func (st *Stanza) buildIndexHtml() error {
+func (st *Stanza) copyMetadataJson(destStanzaBase string) error {
+	destPath := st.DestMetadataPath(destStanzaBase)
+
+	if err := copyFile(destPath, st.MetadataPath()); err != nil {
+		return err
+	}
+
+	log.Printf("copied to %s", destPath)
+
+	return nil
+}
+
+func copyFile(dest, src string) error {
+	fin, err := os.Open(src)
+	if err != nil {
+		return err
+	}
+	defer fin.Close()
+	fout, err := os.Create(dest)
+	if err != nil {
+		return err
+	}
+	_, err = io.Copy(fout, fin)
+	return err
+}
+
+func (st *Stanza) copyAssets(destStanzaBase string) error {
+	if _, err := os.Stat(st.AssetsDir()); os.IsNotExist(err) {
+		return nil
+	}
+	return filepath.Walk(st.AssetsDir(), func(srcPath string, info os.FileInfo, err error) error {
+		if err != nil {
+			return err
+		}
+		rel, err := filepath.Rel(st.AssetsDir(), srcPath)
+		if err != nil {
+			return err
+		}
+		destPath := path.Join(st.DestAssetsDir(destStanzaBase), rel)
+		if info.Mode().IsDir() {
+			if err := os.MkdirAll(destPath, os.FileMode(0755)); err != nil {
+				return err
+			}
+			log.Printf("created directory %s", destPath)
+		} else {
+			if err := copyFile(destPath, srcPath); err != nil {
+				return err
+			}
+			log.Printf("copied to %s", destPath)
+		}
+		return nil
+	})
+}
+
+func (st *Stanza) buildIndexHtml(destStanzaBase string) error {
 	data, err := Asset("data/index.html")
 	if err != nil {
 		return fmt.Errorf("asset not found")
@@ -192,7 +268,7 @@ func (st *Stanza) buildIndexHtml() error {
 		Stylesheet:       string(stylesheet),
 	}
 
-	destPath := st.IndexHtmlPath()
+	destPath := st.DestIndexHtmlPath(destStanzaBase)
 	w, err := os.Create(destPath)
 	if err != nil {
 		return err
@@ -208,7 +284,7 @@ func (st *Stanza) buildIndexHtml() error {
 	return nil
 }
 
-func (st *Stanza) buildHelpHtml() error {
+func (st *Stanza) buildHelpHtml(destStanzaBase string) error {
 	data, err := Asset("data/help.html")
 	if err != nil {
 		return fmt.Errorf("asset not found")
@@ -224,7 +300,7 @@ func (st *Stanza) buildHelpHtml() error {
 		return err
 	}
 
-	destPath := st.HelpHtmlPath()
+	destPath := st.DestHelpHtmlPath(destStanzaBase)
 	w, err := os.Create(destPath)
 	if err != nil {
 		return err
