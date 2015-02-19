@@ -17,20 +17,20 @@ Download latest release binary from https://github.com/togostanza/ts/releases. E
 ### Scaffold
 
 ```
-ts new my-stanza
+$ ts new my-stanza
 ```
 
 
 ### Build
 
 ```
-ts build
+$ ts build
 ```
 
 ### Serve
 
 ```
-ts server
+$ ts server
 ```
 
 ## Development
@@ -38,5 +38,6 @@ ts server
 TODO
 
 ```sh
-go get -u github.com/jteeuwen/go-bindata/...
+$ go get -u github.com/jteeuwen/go-bindata/...
+$ make
 ```
