@@ -19,18 +19,18 @@ type Stanza struct {
 }
 
 type Parameter struct {
-	Key         string `json:"key"`
-	Description string `json:"description"`
-	Example     string `json:"example"`
-	Required    bool   `json:"required"`
+	Key         string `json:"stanza:key"`
+	Description string `json:"stanza:description"`
+	Example     string `json:"stanza:example"`
+	Required    bool   `json:"stanza:required"`
 }
 
 type Metadata struct {
-	Id          string      `json:"@id"`
-	Label       string      `json:"label"`
-	Parameters  []Parameter `json:"parameters"`
-	Description string      `json:"description"`
-	Usage       string      `json:"usage"`
+	Id         string      `json:"@id"`
+	Label      string      `json:"stanza:label"`
+	Parameters []Parameter `json:"stanza:parameters"`
+	Definition string      `json:"stanza:definition"`
+	Usage      string      `json:"stanza:usage"`
 }
 
 func (meta *Metadata) ParameterKeys() []string {

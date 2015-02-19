@@ -1,12 +1,26 @@
 {
-  "stanza": "{{.Name|js}}",
-  "parameters": [
+  "@context": {
+    "stanza": "http://togostanza.org/resource/stanza#"
+  },
+  "@id": "{{.Name|js}}",
+  "stanza:label": "Hello Example",
+  "stanza:definition": "Greeting to a person.",
+  "stanza:parameters": [
     {
-      "key": "name",
-      "example": "Stanza Togo",
-      "description": "name to greet",
-      "required": true
+      "stanza:key": "name",
+      "stanza:example": "Stanza Togo",
+      "stanza:description": "name to greet",
+      "stanza:required": true
     }
   ],
-  "usage": "<togostanza-{{.Name}} name=\"Stanza Togo\"></togostanza-{{.Name}}>"
+  "stanza:usage": "<togostanza-{{.Name}} name=\"Stanza Togo\"></togostanza-{{.Name}}>",
+  "stanza:type": "stanza:Stanza",
+  "stanza:context": "",
+  "stanza:display": "",
+  "stanza:provider": "provider of this stanza",
+  "stanza:license": "",
+  "stanza:author": "author name",
+  "stanza:address": "name@example.org",
+  "stanza:created": "{{.Created|js}}",
+  "stanza:updated": "{{.Updated|js}}"
 }

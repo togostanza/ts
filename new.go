@@ -7,6 +7,7 @@ import (
 	"path"
 	"strings"
 	"text/template"
+	"time"
 )
 
 var cmdNew = &Command{
@@ -22,7 +23,9 @@ func init() {
 }
 
 type NewStanzaParameters struct {
-	Name string
+	Name    string
+	Created string
+	Updated string
 }
 
 func newExtractStanzaAsset(dir, name string, st *NewStanzaParameters) error {
@@ -84,8 +87,11 @@ func runNew(cmd *Command, args []string) {
 	stanzaDir := path.Join(flagStanzaBaseDir, stanzaName)
 	log.Printf("creating stanza directory %#q", stanzaDir)
 
+	t := time.Now()
 	st := NewStanzaParameters{
-		Name: stanzaName,
+		Name:    stanzaName,
+		Created: t.Format("2006-01-02"),
+		Updated: t.Format("2006-01-02"),
 	}
 	err := newExtractStanzaAssets(stanzaDir, "stanza-template", &st)
 	if err != nil {
