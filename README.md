@@ -38,6 +38,7 @@ $ ts server
 TODO
 
 ```sh
+$ npm install -g bower
 $ go get -u github.com/jteeuwen/go-bindata/...
 $ make
 ```
