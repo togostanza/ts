@@ -4,16 +4,10 @@
   },
   "@id": "{{.Name|js}}",
   "stanza:label": "Hello Example",
-  "stanza:definition": "Greeting to a person.",
+  "stanza:definition": "Greeting.",
   "stanza:parameters": [
-    {
-      "stanza:key": "name",
-      "stanza:example": "Stanza Togo",
-      "stanza:description": "name to greet",
-      "stanza:required": true
-    }
   ],
-  "stanza:usage": "<togostanza-{{.Name}} name=\"Stanza Togo\"></togostanza-{{.Name}}>",
+  "stanza:usage": "<togostanza-{{.Name}}></togostanza-{{.Name}}>",
   "stanza:type": "stanza:Stanza",
   "stanza:context": "",
   "stanza:display": "",
