@@ -28,7 +28,7 @@ type NewStanzaParameters struct {
 	Updated string
 }
 
-func newExtractStanzaAsset(dir, name string, st *NewStanzaParameters) error {
+func newExtractStanzaBlueprintAsset(dir, name string, st *NewStanzaParameters) error {
 	data, err := Asset(name)
 	if err != nil {
 		return err
@@ -62,13 +62,13 @@ func newExtractStanzaAsset(dir, name string, st *NewStanzaParameters) error {
 	return nil
 }
 
-func newExtractStanzaAssets(dir, name string, st *NewStanzaParameters) error {
+func newExtractStanzaBlueprintAssets(dir, name string, st *NewStanzaParameters) error {
 	children, err := AssetDir(name)
 	if err != nil { // File
-		return newExtractStanzaAsset(dir, name, st)
+		return newExtractStanzaBlueprintAsset(dir, name, st)
 	} else { // Dir
 		for _, child := range children {
-			err = newExtractStanzaAssets(dir, path.Join(name, child), st)
+			err = newExtractStanzaBlueprintAssets(dir, path.Join(name, child), st)
 			if err != nil {
 				return err
 			}
@@ -93,7 +93,7 @@ func runNew(cmd *Command, args []string) {
 		Created: t.Format("2006-01-02"),
 		Updated: t.Format("2006-01-02"),
 	}
-	err := newExtractStanzaAssets(stanzaDir, "stanza-template", &st)
+	err := newExtractStanzaBlueprintAssets(stanzaDir, "stanza-blueprint", &st)
 	if err != nil {
 		log.Fatal(err)
 	}

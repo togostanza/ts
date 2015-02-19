@@ -9,7 +9,7 @@ import (
 	"text/template"
 )
 
-//go:generate go-bindata data/ assets/... stanza-template/...
+//go:generate go-bindata data/ assets/... stanza-blueprint/...
 
 var flagPort int
 var flagStanzaBaseDir string
