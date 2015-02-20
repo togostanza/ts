@@ -28,6 +28,10 @@ func runServer(cmd *Command, args []string) {
 	assetsHandler := http.FileServer(http.Dir(distPath))
 
 	mux.HandleFunc("/", func(w http.ResponseWriter, req *http.Request) {
+		if req.URL.Path == "/" {
+			http.Redirect(w, req, "/stanza/", http.StatusFound)
+			return
+		}
 		assetsHandler.ServeHTTP(w, req)
 	})
 
