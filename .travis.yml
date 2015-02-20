@@ -6,21 +6,23 @@ install:
 - npm install -g bower
 - go get github.com/jteeuwen/go-bindata/...
 - go get github.com/laher/goxc
+env:
+- TS_VERSION=${TRAVIS_TAG#v}
 script:
 - bower install
 - go generate
-- goxc -d . -pv "$TRAVIS_TAG"
+- goxc -d . -pv "$TS_VERSION"
 deploy:
   provider: releases
   api_key:
     secure: rhHF2pl5nucDEt0/pD4nkQGGll1VY8ftxuquTeJo6ybNgpCE9U/jx/hRLSZK2ldztsgD/WRzZCqYEJiCloPvyI32tSe75EwifIULeYyNdlspPi80jj5U6RhnBLlHD4q5Nu+izNe68iU1qjrQIkTIlCFmrzLQVn6LECh1TX4jXAg=
   file:
-    - $TRAVIS_TAG/ts_${TRAVIS_TAG}_darwin_386.zip
-    - $TRAVIS_TAG/ts_${TRAVIS_TAG}_darwin_amd64.zip
-    - $TRAVIS_TAG/ts_${TRAVIS_TAG}_linux_386.tar.gz
-    - $TRAVIS_TAG/ts_${TRAVIS_TAG}_linux_amd64.tar.gz
-    - $TRAVIS_TAG/ts_${TRAVIS_TAG}_windows_386.zip
-    - $TRAVIS_TAG/ts_${TRAVIS_TAG}_windows_amd64.zip
+    - $TRAVIS_TAG/ts_${TS_VERSION}_darwin_386.zip
+    - $TRAVIS_TAG/ts_${TS_VERSION}_darwin_amd64.zip
+    - $TRAVIS_TAG/ts_${TS_VERSION}_linux_386.tar.gz
+    - $TRAVIS_TAG/ts_${TS_VERSION}_linux_amd64.tar.gz
+    - $TRAVIS_TAG/ts_${TS_VERSION}_windows_386.zip
+    - $TRAVIS_TAG/ts_${TS_VERSION}_windows_amd64.zip
   on:
     repo: togostanza/ts
     tags: true
