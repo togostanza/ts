@@ -6,7 +6,6 @@ import (
 	"os"
 	"path"
 	"strings"
-	"text/template"
 	"time"
 )
 
@@ -29,18 +28,14 @@ type NewStanzaParameters struct {
 }
 
 func newExtractStanzaBlueprintAsset(dir, name string, st *NewStanzaParameters) error {
-	data, err := Asset(name)
-	if err != nil {
-		return err
-	}
-	t := template.Must(template.New(name).Parse(string(data)))
+	t := MustTemplateAsset(name)
 
 	s := strings.SplitN(name, "/", 2)
 	if len(s) != 2 {
 		fmt.Errorf("unexpected name: %s", name)
 	}
 	destName := s[1]
-	err = os.MkdirAll(_filePath(dir, path.Dir(destName)), os.FileMode(0755))
+	err := os.MkdirAll(_filePath(dir, path.Dir(destName)), os.FileMode(0755))
 	if err != nil {
 		return err
 	}

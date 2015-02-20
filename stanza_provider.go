@@ -6,7 +6,6 @@ import (
 	"os"
 	"path"
 	"path/filepath"
-	"text/template"
 	"time"
 )
 
@@ -84,14 +83,7 @@ func (sp *StanzaProvider) buildStanzas(distDir string) error {
 }
 
 func (sp *StanzaProvider) buildList(distDir string) error {
-	data, err := Asset("data/list.html")
-	if err != nil {
-		return fmt.Errorf("asset list.html not found")
-	}
-	tmpl, err := template.New("list.html").Parse(string(data))
-	if err != nil {
-		return err
-	}
+	tmpl := MustTemplateAsset("data/list.html")
 
 	destPath := path.Join(distDir, "index.html")
 	w, err := os.Create(destPath)

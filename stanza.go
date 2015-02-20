@@ -2,14 +2,12 @@ package main
 
 import (
 	"encoding/json"
-	"fmt"
 	"io"
 	"io/ioutil"
 	"log"
 	"os"
 	"path"
 	"path/filepath"
-	"text/template"
 )
 
 type Stanza struct {
@@ -193,15 +191,7 @@ func (st *Stanza) copyAssets(destStanzaBase string) error {
 }
 
 func (st *Stanza) buildIndexHtml(destStanzaBase string) error {
-	data, err := Asset("data/index.html")
-	if err != nil {
-		return fmt.Errorf("asset not found")
-	}
-
-	tmpl, err := template.New("index").Parse(string(data))
-	if err != nil {
-		return err
-	}
+	tmpl := MustTemplateAsset("data/index.html")
 
 	templates := make(map[string]string)
 
@@ -267,17 +257,9 @@ func (st *Stanza) buildIndexHtml(destStanzaBase string) error {
 }
 
 func (st *Stanza) buildHelpHtml(destStanzaBase string) error {
-	data, err := Asset("data/help.html")
-	if err != nil {
-		return fmt.Errorf("asset not found")
-	}
+	tmpl := MustTemplateAsset("data/help.html")
 
 	stylesheet, err := Asset("data/stanza.css")
-	if err != nil {
-		return err
-	}
-
-	tmpl, err := template.New("help.html").Parse(string(data))
 	if err != nil {
 		return err
 	}
