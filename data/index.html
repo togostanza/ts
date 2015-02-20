@@ -1,55 +1,71 @@
-<link rel="import" href="../assets/components/polymer/polymer.html">
 <script src="../assets/components/jquery/dist/jquery.min.js"></script>
 <script src="../assets/components/handlebars/handlebars.min.js"></script>
-<polymer-element name="{{.ElementName}}" attributes="{{.AttributesString}}">
-<template>
-<style>
-{{.Stylesheet}}
-</style>
-<main id="content"></main>
-</template>
 <script>
+(function(descriptor) {
   function Stanza(execute) {
-    Polymer("{{.ElementName}}", {
-      templates: {{.TemplatesJson}},
-      ready: function() {
-        execute.bind(this)(this, this);
-      },
-      {{/* below is a workaround for attributeChanges is not called in some situations */}}
-      {{range .Attributes}}
-        {{.}}Changed: function(attrName, oldVal, newVal) {
-          execute.bind(this)(this, this);
-        },
-      {{end}}
-      query: function(params) {
-        var queryTemplate = Handlebars.compile(this.templates[params.template], {noEscape: true});
-        var query = queryTemplate(params.parameters);
+    var proto = Object.create(HTMLElement.prototype);
 
-        return $.ajax({
-          url: params.endpoint,
-          data: {
-            format: "json",
-            query: query
-          }
-        }).then(function(data) {
-          var rows = data.results.bindings.map(function(row) {
-            var rowOut = {};
-            Object.keys(row).forEach(function(key) {
-              rowOut[key] = row[key].value;
+    function createStanzaHelper(element) {
+      return {
+        query: function(params) {
+          var queryTemplate = Handlebars.compile(descriptor.templates[params.template], {noEscape: true});
+          var query = queryTemplate(params.parameters);
+
+          return $.ajax({
+            url: params.endpoint,
+            data: {
+              format: "json",
+              query: query
+            }
+          }).then(function(data) {
+            var rows = data.results.bindings.map(function(row) {
+              var rowOut = {};
+              Object.keys(row).forEach(function(key) {
+                rowOut[key] = row[key].value;
+              });
+              return rowOut;
             });
-            return rowOut;
-          });
 
-          return rows;
-        });
-      },
-      render: function(params) {
-        var htmlTemplate = Handlebars.compile(this.templates[params.template]);
-        var htmlPartial = htmlTemplate(params.parameters);
-        this.$.content.innerHTML = htmlPartial;
-      }
+            return rows;
+          });
+        },
+        render: function(params) {
+          var htmlTemplate = Handlebars.compile(descriptor.templates[params.template]);
+          var htmlPartial = htmlTemplate(params.parameters);
+          $("main", element.shadowRoot).html(htmlPartial);
+        }
+      };
+    }
+
+    function update(element) {
+      var params = {};
+      descriptor.parameters.forEach(function(key) {
+        params[key] = element.getAttribute(key);
+      });
+      execute(createStanzaHelper(element), params);
+    }
+
+    proto.createdCallback = function() {
+      var shadow = this.createShadowRoot();
+
+      var style = document.createElement("style");
+      style.appendChild(document.createTextNode(descriptor.stylesheet));
+      shadow.appendChild(style);
+      var main = document.createElement("main");
+      shadow.appendChild(main);
+
+      update(this);
+    };
+
+    proto.attributeChangedCallback = function(attrName, oldVal, newVal) {
+      update(this);
+    };
+
+    document.registerElement(descriptor.elementName, {
+      prototype: proto
     });
-  }
-{{.IndexJs}}
+  };
+
+  {{.IndexJs}}
+})({{.DescriptorJson}});
 </script>
-</polymer-element>
