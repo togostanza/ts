@@ -190,21 +190,27 @@ func (st *Stanza) copyAssets(destStanzaBase string) error {
 	})
 }
 
-func (st *Stanza) buildIndexHtml(destStanzaBase string) error {
-	indexHtmlTmpl := MustTemplateAsset("data/index.html")
-
+func (st *Stanza) templates() (map[string]string, error) {
 	templates := make(map[string]string)
 
 	paths, err := filepath.Glob(st.TemplateGlobPattern())
+	if err != nil {
+		return nil, err
+	}
 
 	for _, path := range paths {
 		t, err := ioutil.ReadFile(path)
 		if err != nil {
-			return err
+			return nil, err
 		}
 
 		templates[filepath.Base(path)] = string(t)
 	}
+	return templates, nil
+}
+
+func (st *Stanza) buildIndexHtml(destStanzaBase string) error {
+	indexHtmlTmpl := MustTemplateAsset("data/index.html")
 
 	indexJs, err := ioutil.ReadFile(st.IndexJsPath())
 	if err != nil {
@@ -212,6 +218,11 @@ func (st *Stanza) buildIndexHtml(destStanzaBase string) error {
 	}
 
 	stylesheet, err := Asset("data/stanza.css")
+	if err != nil {
+		return err
+	}
+
+	templates, err := st.templates()
 	if err != nil {
 		return err
 	}
