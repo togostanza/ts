@@ -191,7 +191,7 @@ func (st *Stanza) copyAssets(destStanzaBase string) error {
 }
 
 func (st *Stanza) buildIndexHtml(destStanzaBase string) error {
-	tmpl := MustTemplateAsset("data/index.html")
+	indexHtmlTmpl := MustTemplateAsset("data/index.html")
 
 	templates := make(map[string]string)
 
@@ -247,7 +247,7 @@ func (st *Stanza) buildIndexHtml(destStanzaBase string) error {
 	}
 	defer w.Close()
 
-	if err := tmpl.Execute(w, b); err != nil {
+	if err := indexHtmlTmpl.Execute(w, b); err != nil {
 		return err
 	}
 
