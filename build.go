@@ -32,13 +32,14 @@ func runBuild(cmd *Command, args []string) {
 		log.Fatal(err)
 	}
 	distPath := path.Join(flagStanzaBaseDir, "dist")
-	if err := sp.Build(distPath); err != nil {
+	distStanzaPath := path.Join(distPath, "stanza")
+	if err := sp.Build(distStanzaPath); err != nil {
 		log.Fatal(err)
 	}
 
 	assetsDir := "assets"
-	log.Printf("generating assets under %s", path.Join(distPath, assetsDir))
-	if err := RestoreAssets(distPath, assetsDir); err != nil {
+	log.Printf("generating assets under %s", path.Join(distStanzaPath, assetsDir))
+	if err := RestoreAssets(distStanzaPath, assetsDir); err != nil {
 		log.Fatal(err)
 	}
 }
