@@ -174,6 +174,7 @@ func copyFile(dest, src string) error {
 	if err != nil {
 		return err
 	}
+	defer fout.Close()
 	_, err = io.Copy(fout, fin)
 	return err
 }
