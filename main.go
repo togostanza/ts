@@ -11,6 +11,7 @@ import (
 
 //go:generate go-bindata data/ assets/... stanza-blueprint/...
 
+var VERSION = "snapshot"
 var flagPort int
 var flagStanzaBaseDir string
 
@@ -33,6 +34,7 @@ var commands = []*Command{
 	cmdBuild,
 	cmdServer,
 	cmdNew,
+	cmdVersion,
 }
 
 const usageTemplate = `Usage:
