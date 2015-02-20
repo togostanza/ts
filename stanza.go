@@ -9,7 +9,6 @@ import (
 	"os"
 	"path"
 	"path/filepath"
-	"strings"
 	"text/template"
 )
 
@@ -237,11 +236,6 @@ func (st *Stanza) buildIndexHtml(destStanzaBase string) error {
 		templates[filepath.Base(path)] = string(t)
 	}
 
-	buffer, err := json.Marshal(templates)
-	if err != nil {
-		return err
-	}
-
 	indexJs, err := st.IndexJs()
 	if err != nil {
 		return err
@@ -252,20 +246,28 @@ func (st *Stanza) buildIndexHtml(destStanzaBase string) error {
 		return err
 	}
 
-	b := struct {
-		TemplatesJson    string
-		IndexJs          string
-		ElementName      string
-		AttributesString string
-		Attributes       []string
-		Stylesheet       string
+	descriptor := struct {
+		Templates   map[string]string `json:"templates"`
+		Parameters  []string          `json:"parameters"`
+		ElementName string            `json:"elementName"`
+		Stylesheet  string            `json:"stylesheet"`
 	}{
-		TemplatesJson:    string(buffer),
-		IndexJs:          string(indexJs),
-		ElementName:      st.ElementName(),
-		AttributesString: strings.Join(st.Metadata.ParameterKeys(), " "),
-		Attributes:       st.Metadata.ParameterKeys(),
-		Stylesheet:       string(stylesheet),
+		Templates:   templates,
+		Parameters:  st.Metadata.ParameterKeys(),
+		ElementName: st.ElementName(),
+		Stylesheet:  string(stylesheet),
+	}
+	descriptorJson, err := json.Marshal(descriptor)
+	if err != nil {
+		return err
+	}
+
+	b := struct {
+		IndexJs        string
+		DescriptorJson string
+	}{
+		IndexJs:        string(indexJs),
+		DescriptorJson: string(descriptorJson),
 	}
 
 	destPath := st.DestIndexHtmlPath(destStanzaBase)
