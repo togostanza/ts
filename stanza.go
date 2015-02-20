@@ -118,21 +118,6 @@ func (st *Stanza) ElementName() string {
 	return "togostanza-" + st.Name
 }
 
-func (st *Stanza) IndexJs() ([]byte, error) {
-	f, err := os.Open(st.IndexJsPath())
-	if err != nil {
-		return nil, err
-	}
-	defer f.Close()
-
-	js, err := ioutil.ReadAll(f)
-	if err != nil {
-		return nil, err
-	}
-
-	return js, nil
-}
-
 func (st *Stanza) Build(destStanzaBase string) error {
 	if err := os.MkdirAll(destStanzaBase, os.FileMode(0755)); err != nil {
 		return err
@@ -237,7 +222,7 @@ func (st *Stanza) buildIndexHtml(destStanzaBase string) error {
 		templates[filepath.Base(path)] = string(t)
 	}
 
-	indexJs, err := st.IndexJs()
+	indexJs, err := ioutil.ReadFile(st.IndexJsPath())
 	if err != nil {
 		return err
 	}
