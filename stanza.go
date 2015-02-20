@@ -208,13 +208,7 @@ func (st *Stanza) buildIndexHtml(destStanzaBase string) error {
 	paths, err := filepath.Glob(st.TemplateGlobPattern())
 
 	for _, path := range paths {
-		f, err := os.Open(path)
-		if err != nil {
-			return err
-		}
-		defer f.Close()
-
-		t, err := ioutil.ReadAll(f)
+		t, err := ioutil.ReadFile(path)
 		if err != nil {
 			return err
 		}
