@@ -50,6 +50,10 @@ func (sp *StanzaProvider) Load() error {
 }
 
 func (sp *StanzaProvider) Build(distDir string) error {
+	if sp.NumStanzas() == 0 {
+		return fmt.Errorf("no stanzas available under %s", sp.baseDir)
+	}
+
 	if err := os.MkdirAll(distDir, os.FileMode(0755)); err != nil {
 		return err
 	}
@@ -73,10 +77,6 @@ func (sp *StanzaProvider) buildStanzas(distDir string) error {
 			return err
 		}
 		numBuilt++
-	}
-
-	if numBuilt == 0 {
-		return fmt.Errorf("no stanzas available under %s", sp.baseDir)
 	}
 
 	log.Printf("%d stanza(s) built in %s", numBuilt, time.Since(t0))
