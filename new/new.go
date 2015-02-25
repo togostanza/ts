@@ -12,13 +12,13 @@ import (
 
 //go:generate go-bindata -pkg new blueprint/...
 
-type NewStanzaParameters struct {
+type parameters struct {
 	Name    string
 	Created string
 	Updated string
 }
 
-func extractBlueprintAsset(dir, name string, st *NewStanzaParameters) error {
+func extractBlueprintAsset(dir, name string, params *parameters) error {
 	t := MustTemplateAsset(name)
 
 	s := strings.SplitN(name, "/", 2)
@@ -38,7 +38,7 @@ func extractBlueprintAsset(dir, name string, st *NewStanzaParameters) error {
 	}
 	defer w.Close()
 
-	err = t.Execute(w, st)
+	err = t.Execute(w, params)
 	if err != nil {
 		return err
 	}
@@ -48,13 +48,13 @@ func extractBlueprintAsset(dir, name string, st *NewStanzaParameters) error {
 	return nil
 }
 
-func extractBlueprintAssets(dir, name string, st *NewStanzaParameters) error {
+func extractBlueprintAssets(dir, name string, params *parameters) error {
 	children, err := AssetDir(name)
 	if err != nil { // File
-		return extractBlueprintAsset(dir, name, st)
+		return extractBlueprintAsset(dir, name, params)
 	} else { // Dir
 		for _, child := range children {
-			err = extractBlueprintAssets(dir, path.Join(name, child), st)
+			err = extractBlueprintAssets(dir, path.Join(name, child), params)
 			if err != nil {
 				return err
 			}
@@ -68,12 +68,12 @@ func Generate(stanzaName string, stanzaBaseDir string) error {
 	log.Printf("creating stanza directory %#q", stanzaDir)
 
 	t := time.Now()
-	st := NewStanzaParameters{
+	params := parameters{
 		Name:    stanzaName,
 		Created: t.Format("2006-01-02"),
 		Updated: t.Format("2006-01-02"),
 	}
-	return extractBlueprintAssets(stanzaDir, "blueprint", &st)
+	return extractBlueprintAssets(stanzaDir, "blueprint", &params)
 }
 
 func MustTemplateAsset(path string) *template.Template {
