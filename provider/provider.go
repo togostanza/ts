@@ -12,7 +12,7 @@ import (
 	"github.com/togostanza/ts/stanza"
 )
 
-//go:generate go-bindata -pkg=provider data/...
+//go:generate go-bindata -pkg=provider data/... assets/...
 
 type StanzaProvider struct {
 	baseDir string
@@ -65,6 +65,9 @@ func (sp *StanzaProvider) Build(distDir string) error {
 	if err := sp.buildStanzas(distDir); err != nil {
 		return err
 	}
+	if err := sp.extractAssets(distDir); err != nil {
+		return err
+	}
 	if err := sp.buildList(distDir); err != nil {
 		return err
 	}
@@ -110,6 +113,12 @@ func (sp *StanzaProvider) buildList(distDir string) error {
 	log.Printf("generated %s", destPath)
 
 	return nil
+}
+
+func (sp *StanzaProvider) extractAssets(distStanzaPath string) error {
+	assetsDir := "assets"
+	log.Printf("generating assets under %s", path.Join(distStanzaPath, assetsDir))
+	return RestoreAssets(distStanzaPath, assetsDir)
 }
 
 func (sp *StanzaProvider) Stanzas() []*stanza.Stanza {

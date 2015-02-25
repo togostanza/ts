@@ -9,8 +9,6 @@ import (
 	"text/template"
 )
 
-//go:generate go-bindata assets/...
-
 var VERSION = "snapshot"
 var flagPort int
 var flagStanzaBaseDir string

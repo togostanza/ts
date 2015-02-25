@@ -38,10 +38,4 @@ func runBuild(cmd *Command, args []string) {
 	if err := sp.Build(distStanzaPath); err != nil {
 		log.Fatal(err)
 	}
-
-	assetsDir := "assets"
-	log.Printf("generating assets under %s", path.Join(distStanzaPath, assetsDir))
-	if err := RestoreAssets(distStanzaPath, assetsDir); err != nil {
-		log.Fatal(err)
-	}
 }
