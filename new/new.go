@@ -18,7 +18,7 @@ type NewStanzaParameters struct {
 	Updated string
 }
 
-func newExtractStanzaBlueprintAsset(dir, name string, st *NewStanzaParameters) error {
+func extractBlueprintAsset(dir, name string, st *NewStanzaParameters) error {
 	t := MustTemplateAsset(name)
 
 	s := strings.SplitN(name, "/", 2)
@@ -48,13 +48,13 @@ func newExtractStanzaBlueprintAsset(dir, name string, st *NewStanzaParameters) e
 	return nil
 }
 
-func newExtractStanzaBlueprintAssets(dir, name string, st *NewStanzaParameters) error {
+func extractBlueprintAssets(dir, name string, st *NewStanzaParameters) error {
 	children, err := AssetDir(name)
 	if err != nil { // File
-		return newExtractStanzaBlueprintAsset(dir, name, st)
+		return extractBlueprintAsset(dir, name, st)
 	} else { // Dir
 		for _, child := range children {
-			err = newExtractStanzaBlueprintAssets(dir, path.Join(name, child), st)
+			err = extractBlueprintAssets(dir, path.Join(name, child), st)
 			if err != nil {
 				return err
 			}
@@ -73,7 +73,7 @@ func Generate(stanzaName string, stanzaBaseDir string) error {
 		Created: t.Format("2006-01-02"),
 		Updated: t.Format("2006-01-02"),
 	}
-	return newExtractStanzaBlueprintAssets(stanzaDir, "blueprint", &st)
+	return extractBlueprintAssets(stanzaDir, "blueprint", &st)
 }
 
 func MustTemplateAsset(path string) *template.Template {
