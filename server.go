@@ -5,6 +5,8 @@ import (
 	"log"
 	"net/http"
 	"path"
+
+	"github.com/togostanza/ts/provider"
 )
 
 var cmdServer = &Command{
@@ -21,10 +23,18 @@ func init() {
 }
 
 func runServer(cmd *Command, args []string) {
-	runBuild(nil, nil)
+	sp, err := provider.New(flagStanzaBaseDir)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	distPath := path.Join(flagStanzaBaseDir, "dist")
+	distStanzaPath := path.Join(distPath, "stanza")
+	if err := sp.Build(distStanzaPath); err != nil {
+		log.Fatal(err)
+	}
 
 	mux := http.NewServeMux()
-	distPath := path.Join(flagStanzaBaseDir, "dist")
 	assetsHandler := http.FileServer(http.Dir(distPath))
 
 	mux.HandleFunc("/", func(w http.ResponseWriter, req *http.Request) {
