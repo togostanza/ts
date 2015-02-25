@@ -1,4 +1,4 @@
-package main
+package stanza
 
 import (
 	"encoding/json"
@@ -8,7 +8,10 @@ import (
 	"os"
 	"path"
 	"path/filepath"
+	"text/template"
 )
+
+//go:generate go-bindata -pkg=stanza data/...
 
 type Stanza struct {
 	BaseDir string
@@ -320,4 +323,13 @@ func (st *Stanza) buildHelpHtml(destStanzaBase string) error {
 	log.Printf("generated %s", destPath)
 
 	return nil
+}
+
+func MustTemplateAsset(path string) *template.Template {
+	data, err := Asset(path)
+	if err != nil {
+		panic("asset " + path + "not found")
+	}
+
+	return template.Must(template.New(path).Parse(string(data)))
 }

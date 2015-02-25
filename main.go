@@ -9,7 +9,7 @@ import (
 	"text/template"
 )
 
-//go:generate go-bindata data/ assets/... stanza-blueprint/...
+//go:generate go-bindata assets/... stanza-blueprint/...
 
 var VERSION = "snapshot"
 var flagPort int

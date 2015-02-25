@@ -2,5 +2,5 @@ default: install
 
 install:
 	bower install
-	go generate
+	go generate ./...
 	go install .

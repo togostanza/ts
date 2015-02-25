@@ -7,11 +7,13 @@ import (
 	"path"
 	"path/filepath"
 	"time"
+
+	"github.com/togostanza/ts/stanza"
 )
 
 type StanzaProvider struct {
 	baseDir string
-	stanzas map[string]*Stanza
+	stanzas map[string]*stanza.Stanza
 }
 
 func NewStanzaProvider(baseDir string) (*StanzaProvider, error) {
@@ -32,12 +34,12 @@ func (sp *StanzaProvider) Load() error {
 		return err
 	}
 
-	stanzas := make(map[string]*Stanza)
+	stanzas := make(map[string]*stanza.Stanza)
 	for _, stanzaMetadataPath := range stanzaMetadataPaths {
 		stanzaPath := filepath.Dir(stanzaMetadataPath)
 		stanzaName := filepath.Base(stanzaPath)
 		log.Printf("loading stanza %s", stanzaPath)
-		stanza, err := NewStanza(path.Join(stanzaPath), stanzaName)
+		stanza, err := stanza.NewStanza(path.Join(stanzaPath), stanzaName)
 		if err != nil {
 			return err
 		}
@@ -93,7 +95,7 @@ func (sp *StanzaProvider) buildList(distDir string) error {
 	defer w.Close()
 
 	context := struct {
-		Stanzas []*Stanza
+		Stanzas []*stanza.Stanza
 	}{
 		Stanzas: sp.Stanzas(),
 	}
@@ -107,8 +109,8 @@ func (sp *StanzaProvider) buildList(distDir string) error {
 	return nil
 }
 
-func (sp *StanzaProvider) Stanzas() []*Stanza {
-	stanzas := make([]*Stanza, len(sp.stanzas))
+func (sp *StanzaProvider) Stanzas() []*stanza.Stanza {
+	stanzas := make([]*stanza.Stanza, len(sp.stanzas))
 	i := 0
 	for _, stanza := range sp.stanzas {
 		stanzas[i] = stanza
@@ -117,7 +119,7 @@ func (sp *StanzaProvider) Stanzas() []*Stanza {
 	return stanzas
 }
 
-func (sp *StanzaProvider) Stanza(name string) *Stanza {
+func (sp *StanzaProvider) Stanza(name string) *stanza.Stanza {
 	return sp.stanzas[name]
 }
 
