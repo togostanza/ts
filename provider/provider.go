@@ -54,6 +54,8 @@ func (sp *StanzaProvider) Load() error {
 }
 
 func (sp *StanzaProvider) Build(distDir string) error {
+	t0 := time.Now()
+
 	if sp.NumStanzas() == 0 {
 		return fmt.Errorf("no stanzas available under %s", sp.baseDir)
 	}
@@ -71,12 +73,13 @@ func (sp *StanzaProvider) Build(distDir string) error {
 	if err := sp.buildList(distDir); err != nil {
 		return err
 	}
+
+	log.Println("built in", time.Since(t0))
 	return nil
 }
 
 func (sp *StanzaProvider) buildStanzas(distDir string) error {
 	log.Println("building stanzas")
-	t0 := time.Now()
 	numBuilt := 0
 	for name, stanza := range sp.stanzas {
 		destStanzaBase := path.Join(distDir, name)
@@ -86,7 +89,7 @@ func (sp *StanzaProvider) buildStanzas(distDir string) error {
 		numBuilt++
 	}
 
-	log.Printf("%d stanza(s) built in %s", numBuilt, time.Since(t0))
+	log.Printf("%d stanza(s) built", numBuilt)
 	return nil
 }
 
