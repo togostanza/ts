@@ -19,7 +19,7 @@ type StanzaProvider struct {
 	stanzas map[string]*stanza.Stanza
 }
 
-func NewStanzaProvider(baseDir string) (*StanzaProvider, error) {
+func New(baseDir string) (*StanzaProvider, error) {
 	sp := StanzaProvider{
 		baseDir: baseDir,
 	}

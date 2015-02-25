@@ -29,7 +29,7 @@ func init() {
 }
 
 func runBuild(cmd *Command, args []string) {
-	sp, err := provider.NewStanzaProvider(flagStanzaBaseDir)
+	sp, err := provider.New(flagStanzaBaseDir)
 	if err != nil {
 		log.Fatal(err)
 	}
