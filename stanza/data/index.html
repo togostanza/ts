@@ -32,7 +32,8 @@
         render: function(params) {
           var htmlTemplate = Handlebars.compile(descriptor.templates[params.template]);
           var htmlPartial = htmlTemplate(params.parameters);
-          $("main", element.shadowRoot).html(htmlPartial);
+          var selector = params.selector || "main";
+          $(selector, element.shadowRoot).html(htmlPartial);
         }
       };
     }
