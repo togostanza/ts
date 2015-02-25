@@ -4,6 +4,8 @@ import (
 	"log"
 	"path"
 	"path/filepath"
+
+	"github.com/togostanza/ts/provider"
 )
 
 var cmdBuild = &Command{
@@ -27,7 +29,7 @@ func init() {
 }
 
 func runBuild(cmd *Command, args []string) {
-	sp, err := NewStanzaProvider(flagStanzaBaseDir)
+	sp, err := provider.NewStanzaProvider(flagStanzaBaseDir)
 	if err != nil {
 		log.Fatal(err)
 	}

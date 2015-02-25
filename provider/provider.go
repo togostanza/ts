@@ -1,4 +1,4 @@
-package main
+package provider
 
 import (
 	"fmt"
@@ -6,10 +6,13 @@ import (
 	"os"
 	"path"
 	"path/filepath"
+	"text/template"
 	"time"
 
 	"github.com/togostanza/ts/stanza"
 )
+
+//go:generate go-bindata -pkg=provider data/...
 
 type StanzaProvider struct {
 	baseDir string
@@ -125,4 +128,13 @@ func (sp *StanzaProvider) Stanza(name string) *stanza.Stanza {
 
 func (sp *StanzaProvider) NumStanzas() int {
 	return len(sp.stanzas)
+}
+
+func MustTemplateAsset(path string) *template.Template {
+	data, err := Asset(path)
+	if err != nil {
+		panic("asset " + path + "not found")
+	}
+
+	return template.Must(template.New(path).Parse(string(data)))
 }
