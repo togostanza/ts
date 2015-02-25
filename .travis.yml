@@ -10,7 +10,7 @@ env:
 - TS_VERSION=${TRAVIS_TAG#v}
 script:
 - bower install
-- go generate
+- go generate ./...
 - goxc -d . -pv "$TS_VERSION"
 deploy:
   provider: releases
