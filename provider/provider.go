@@ -83,6 +83,9 @@ func (sp *StanzaProvider) build(distDir string) error {
 		return fmt.Errorf("no stanzas available under %s", sp.baseDir)
 	}
 
+	if err := os.RemoveAll(distDir); err != nil {
+		return err
+	}
 	if err := os.MkdirAll(distDir, os.FileMode(0755)); err != nil {
 		return err
 	}
