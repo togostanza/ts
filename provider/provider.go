@@ -15,8 +15,9 @@ import (
 //go:generate go-bindata -pkg=provider data/... assets/...
 
 type StanzaProvider struct {
-	baseDir string
-	stanzas map[string]*stanza.Stanza
+	baseDir      string
+	stanzas      map[string]*stanza.Stanza
+	lastModified time.Time
 }
 
 func New(baseDir string) (*StanzaProvider, error) {
@@ -24,11 +25,29 @@ func New(baseDir string) (*StanzaProvider, error) {
 		baseDir: baseDir,
 	}
 
-	if err := sp.Load(); err != nil {
-		return nil, err
-	}
-
 	return &sp, nil
+}
+
+func (sp *StanzaProvider) LastModified() (time.Time, error) {
+	var t time.Time
+	err := filepath.Walk(sp.baseDir, func(path string, info os.FileInfo, err error) error {
+		if err != nil {
+			return err
+		}
+		rel, err := filepath.Rel(sp.baseDir, path)
+		if err != nil {
+			return err
+		}
+		if rel == "dist" {
+			return filepath.SkipDir
+		}
+		mt := info.ModTime()
+		if mt.After(t) {
+			t = mt
+		}
+		return nil
+	})
+	return t, err
 }
 
 func (sp *StanzaProvider) Load() error {
@@ -53,8 +72,12 @@ func (sp *StanzaProvider) Load() error {
 	return nil
 }
 
-func (sp *StanzaProvider) Build(distDir string) error {
+func (sp *StanzaProvider) build(distDir string) error {
 	t0 := time.Now()
+
+	if err := sp.Load(); err != nil {
+		return err
+	}
 
 	if sp.NumStanzas() == 0 {
 		return fmt.Errorf("no stanzas available under %s", sp.baseDir)
@@ -75,6 +98,35 @@ func (sp *StanzaProvider) Build(distDir string) error {
 	}
 
 	log.Println("built in", time.Since(t0))
+	return nil
+}
+
+func (sp *StanzaProvider) Build(distDir string) error {
+	lm, err := sp.LastModified()
+	if err != nil {
+		return err
+	}
+	sp.lastModified = lm
+
+	if err := sp.build(distDir); err != nil {
+		return err
+	}
+	return nil
+}
+
+func (sp *StanzaProvider) RebuildIfRequired(distDir string) error {
+	lm, err := sp.LastModified()
+	if err != nil {
+		return err
+	}
+
+	if lm.After(sp.lastModified) {
+		sp.lastModified = lm
+		log.Println("update detected; rebuilding ...")
+		if err := sp.Build(distDir); err != nil {
+			return err
+		}
+	}
 	return nil
 }
 

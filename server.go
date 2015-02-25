@@ -5,6 +5,7 @@ import (
 	"log"
 	"net/http"
 	"path"
+	"regexp"
 
 	"github.com/togostanza/ts/provider"
 )
@@ -16,6 +17,8 @@ var cmdServer = &Command{
 	UsageLine: "server [-port port] [-stanza-base-dir dir]",
 	Long:      "Run ts server for development",
 }
+
+var REGEXP_STANZA_PATH = regexp.MustCompile(`^/stanza/([^/]+)/`)
 
 func init() {
 	cmdServer.Flag.IntVar(&flagPort, "port", 8080, "port to listen on")
@@ -41,6 +44,14 @@ func runServer(cmd *Command, args []string) {
 		if req.URL.Path == "/" {
 			http.Redirect(w, req, "/stanza/", http.StatusFound)
 			return
+		}
+		if m := REGEXP_STANZA_PATH.FindStringSubmatch(req.URL.Path); len(m) > 0 {
+			if m[1] != "assets" {
+				err := sp.RebuildIfRequired(distStanzaPath)
+				if err != nil {
+					log.Println("ERROR during rebuild:", err)
+				}
+			}
 		}
 		assetsHandler.ServeHTTP(w, req)
 	})
