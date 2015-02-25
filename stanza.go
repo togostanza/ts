@@ -96,6 +96,10 @@ func (st *Stanza) AssetsDir() string {
 	return path.Join(st.BaseDir, "assets")
 }
 
+func (st *Stanza) HeaderHtmlPath() string {
+	return path.Join(st.BaseDir, "_header.html")
+}
+
 func (st *Stanza) DestMetadataPath(destStanzaBase string) string {
 	return path.Join(destStanzaBase, "metadata.json")
 }
@@ -209,6 +213,16 @@ func (st *Stanza) templates() (map[string]string, error) {
 	return templates, nil
 }
 
+func (st *Stanza) headerHtml() ([]byte, error) {
+	path := st.HeaderHtmlPath()
+	if _, err := os.Stat(path); os.IsNotExist(err) {
+		return nil, nil
+	} else if err != nil {
+		return nil, err
+	}
+	return ioutil.ReadFile(path)
+}
+
 func (st *Stanza) buildIndexHtml(destStanzaBase string) error {
 	indexHtmlTmpl := MustTemplateAsset("data/index.html")
 
@@ -243,12 +257,19 @@ func (st *Stanza) buildIndexHtml(destStanzaBase string) error {
 		return err
 	}
 
+	headerHtml, err := st.headerHtml()
+	if err != nil {
+		return err
+	}
+
 	b := struct {
 		IndexJs        string
 		DescriptorJson string
+		HeaderHtml     string
 	}{
 		IndexJs:        string(indexJs),
 		DescriptorJson: string(descriptorJson),
+		HeaderHtml:     string(headerHtml),
 	}
 
 	destPath := st.DestIndexHtmlPath(destStanzaBase)
