@@ -17,16 +17,6 @@
               format: "json",
               query: query
             }
-          }).then(function(data) {
-            var rows = data.results.bindings.map(function(row) {
-              var rowOut = {};
-              Object.keys(row).forEach(function(key) {
-                rowOut[key] = row[key].value;
-              });
-              return rowOut;
-            });
-
-            return rows;
           });
         },
         render: function(params) {
