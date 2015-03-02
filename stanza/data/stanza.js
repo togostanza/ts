@@ -17,9 +17,9 @@ function Stanza(execute) {
       },
       render: function(params) {
         var htmlTemplate = Handlebars.compile(descriptor.templates[params.template]);
-        var htmlPartial = htmlTemplate(params.parameters);
+        var htmlFragment = htmlTemplate(params.parameters);
         var selector = params.selector || "main";
-        $(selector, element.shadowRoot).html(htmlPartial);
+        $(selector, element.shadowRoot).html(htmlFragment);
       },
       root: element.shadowRoot,
       select: function(selector) {
