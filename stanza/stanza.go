@@ -301,7 +301,7 @@ func (st *Stanza) buildIndexHtml(destStanzaBase string) error {
 func (st *Stanza) buildHelpHtml(destStanzaBase string) error {
 	tmpl := MustTemplateAsset("data/help.html")
 
-	stylesheet, err := Asset("data/stanza.css")
+	stylesheet, err := Asset("data/help.css")
 	if err != nil {
 		return err
 	}
