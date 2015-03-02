@@ -174,9 +174,21 @@ func (sp *StanzaProvider) buildList(distDir string) error {
 }
 
 func (sp *StanzaProvider) extractAssets(distStanzaPath string) error {
-	assetsDir := "assets"
-	log.Printf("generating assets under %s", path.Join(distStanzaPath, assetsDir))
-	return RestoreAssets(distStanzaPath, assetsDir)
+	assetsToExtract := []string{
+		"assets/components/webcomponentsjs/webcomponents.min.js",
+		"assets/components/jquery/dist/jquery.min.js",
+		"assets/components/jquery/dist/jquery.min.map",
+		"assets/components/handlebars/handlebars.min.js",
+	}
+	for _, asset := range assetsToExtract {
+		err := RestoreAsset(distStanzaPath, asset)
+		if err != nil {
+			return err
+		}
+		log.Printf("generated %s", path.Join(distStanzaPath, asset))
+	}
+
+	return nil
 }
 
 func (sp *StanzaProvider) Stanzas() []*stanza.Stanza {
