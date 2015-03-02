@@ -11,53 +11,54 @@
   </head>
 
   <body>
+    <div id="contents">
+      <h1 class="page_ttl">{{.Metadata.Label|html}}</h1>
 
-  <h1>{{.Metadata.Label|html}}</h1>
+      <ul class="showcase_icn">
+        <li>Organism</li>
+        <li>Full stanza</li>
+        <li>Table</li>
+        <li>CC</li>
+      </ul>
 
-  <p>{{.Metadata.Definition|html}}</p>
+      <p class="lead">{{.Metadata.Definition|html}}</p>
 
-  <h2>Parameters</h2>
+      <div class="showcase_detail">
+        <ul class="showcase_id">
+          {{range .Metadata.Parameters}}
+            <li>
+              <dl>
+                <dt>{{.Key|html}}</dt>
 
-  <table class="table">
-    <tbody>
-    <tr>
-      <th>
-        Required
-      </th>
-      <th>
-        Key
-      </th>
-      <th>
-        Description
-      </th>
-      <th>
-        Example
-      </th>
-    </tr>
-    {{range .Metadata.Parameters}}
-    <tr>
-      <td>
-        {{.Required}}
-      </td>
-      <td>
-        {{.Key|html}}
-      </td>
-      <td>
-        {{.Description|html}}
-      </td>
-      <td>
-        {{.Example|html}}
-      </td>
-    </tr>
-    {{end}}
-    </tbody>
-  </table>
+                <dd>
+                  <p class="id_box">
+                    {{.Example|html}}
 
-  <h2>Usage</h2>
-  <pre>{{.Metadata.Usage|html}}</pre>
+                    {{if .Required}}
+                      <span class="required">required</span>
+                    {{end}}
+                  </p>
 
-  <h2>Sample</h2>
-  {{.Metadata.Usage}}
+                  <p class="eg">
+                    {{.Description|html}}
+                  </p>
+                </dd>
+              </dl>
+            </li>
+          {{end}}
+        </ul>
 
+        <div class="showcase_code">
+          <code>{{.Metadata.Usage|html}}</code>
+        </div>
+
+        <div class="showcase_box">
+          {{.Metadata.Usage}}
+        </div>
+
+        <p class="explain">
+          The above element will automatically embed the following Stanza in your HTML page.
+        </p>
+      </div>
   </body>
 </html>
