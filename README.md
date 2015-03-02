@@ -14,24 +14,8 @@ Download latest release binary from https://github.com/togostanza/ts/releases. E
 
 ## Usage
 
-### Scaffold
+See https://github.com/togostanza/ts/wiki
 
-```
-$ ts new my-stanza
-```
-
-
-### Build
-
-```
-$ ts build
-```
-
-### Serve
-
-```
-$ ts server
-```
 
 ## Development
 
