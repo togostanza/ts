@@ -20,6 +20,9 @@ function Stanza(execute) {
         var htmlPartial = htmlTemplate(params.parameters);
         var selector = params.selector || "main";
         $(selector, element.shadowRoot).html(htmlPartial);
+      },
+      $: function(selector) {
+        return $(selector, element.shadowRoot);
       }
     };
   }
