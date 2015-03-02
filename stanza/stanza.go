@@ -239,6 +239,11 @@ func (st *Stanza) buildIndexHtml(destStanzaBase string) error {
 		return err
 	}
 
+	stanzaJs, err := Asset("data/stanza.js")
+	if err != nil {
+		return err
+	}
+
 	templates, err := st.templates()
 	if err != nil {
 		return err
@@ -266,10 +271,12 @@ func (st *Stanza) buildIndexHtml(destStanzaBase string) error {
 	}
 
 	b := struct {
+		StanzaJs       string
 		IndexJs        string
 		DescriptorJson string
 		HeaderHtml     string
 	}{
+		StanzaJs:       string(stanzaJs),
 		IndexJs:        string(indexJs),
 		DescriptorJson: string(descriptorJson),
 		HeaderHtml:     string(headerHtml),
