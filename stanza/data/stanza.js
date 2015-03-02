@@ -21,8 +21,12 @@ function Stanza(execute) {
         var selector = params.selector || "main";
         $(selector, element.shadowRoot).html(htmlPartial);
       },
-      $: function(selector) {
-        return $(selector, element.shadowRoot);
+      root: element.shadowRoot,
+      select: function(selector) {
+        return this.root.querySelector(selector);
+      },
+      selectAll: function(selector) {
+        return this.root.querySelectorAll(selector);
       }
     };
   }
