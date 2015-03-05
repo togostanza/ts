@@ -41,6 +41,7 @@ func runServer(cmd *Command, args []string) {
 	assetsHandler := http.FileServer(http.Dir(distPath))
 
 	mux.HandleFunc("/", func(w http.ResponseWriter, req *http.Request) {
+		w.Header().Set("Access-Control-Allow-Origin", "*")
 		if req.URL.Path == "/" {
 			http.Redirect(w, req, "/stanza/", http.StatusFound)
 			return
