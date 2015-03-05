@@ -52,7 +52,15 @@ function Stanza(execute) {
   };
 
   proto.attributeChangedCallback = function(attrName, oldVal, newVal) {
-    update(this);
+    var found = false;
+    descriptor.parameters.forEach(function(key) {
+      if (attrName == key) {
+        found = true;
+      }
+    });
+    if (found) {
+      update(this);
+    }
   };
 
   document.registerElement(descriptor.elementName, {
