@@ -149,11 +149,11 @@ func (st *Stanza) ElementName() string {
 	return "togostanza-" + st.Name
 }
 
-func (st *Stanza) Build(destStanzaBase string) error {
+func (st *Stanza) Build(destStanzaBase string, development bool) error {
 	if err := os.MkdirAll(destStanzaBase, os.FileMode(0755)); err != nil {
 		return err
 	}
-	if err := st.buildIndexHtml(destStanzaBase); err != nil {
+	if err := st.buildIndexHtml(destStanzaBase, development); err != nil {
 		return err
 	}
 	if err := st.buildHelpHtml(destStanzaBase); err != nil {
@@ -252,7 +252,7 @@ func (st *Stanza) headerHtml() ([]byte, error) {
 	return ioutil.ReadFile(path)
 }
 
-func (st *Stanza) buildIndexHtml(destStanzaBase string) error {
+func (st *Stanza) buildIndexHtml(destStanzaBase string, development bool) error {
 	indexHtmlTmpl := MustTemplateAsset("data/index.html")
 
 	indexJs, err := ioutil.ReadFile(st.IndexJsPath())
@@ -280,11 +280,13 @@ func (st *Stanza) buildIndexHtml(destStanzaBase string) error {
 		Parameters  []string          `json:"parameters"`
 		ElementName string            `json:"elementName"`
 		Stylesheet  string            `json:"stylesheet"`
+		Development bool              `json:"development"`
 	}{
 		Templates:   templates,
 		Parameters:  st.Metadata.ParameterKeys(),
 		ElementName: st.ElementName(),
 		Stylesheet:  string(stylesheet),
+		Development: development,
 	}
 	descriptorJson, err := json.Marshal(descriptor)
 	if err != nil {
@@ -301,6 +303,7 @@ func (st *Stanza) buildIndexHtml(destStanzaBase string) error {
 		IndexJs        string
 		DescriptorJson string
 		HeaderHtml     string
+		TsVersion      string
 	}{
 		StanzaJs:       string(stanzaJs),
 		IndexJs:        string(indexJs),

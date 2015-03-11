@@ -12,6 +12,7 @@ import (
 var VERSION = "snapshot"
 var flagPort int
 var flagStanzaBaseDir string
+var flagBuildDevelopment bool
 
 type Command struct {
 	Run       func(cmd *Command, args []string)

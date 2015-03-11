@@ -12,7 +12,7 @@ var cmdBuild = &Command{
 	Run:       runBuild,
 	Name:      "build",
 	Short:     "build stanza provider",
-	UsageLine: "server [-stanza-base-dir dir]",
+	UsageLine: "server [-stanza-base-dir dir] [-development=false]",
 	Long:      "Build stanza provider",
 }
 
@@ -26,6 +26,7 @@ func addBuildFlags(cmd *Command) {
 
 func init() {
 	addBuildFlags(cmdBuild)
+	cmdBuild.Flag.BoolVar(&flagBuildDevelopment, "development", false, "development mode")
 }
 
 func runBuild(cmd *Command, args []string) {
@@ -35,7 +36,7 @@ func runBuild(cmd *Command, args []string) {
 	}
 	distPath := path.Join(flagStanzaBaseDir, "dist")
 	distStanzaPath := path.Join(distPath, "stanza")
-	if err := sp.Build(distStanzaPath); err != nil {
+	if err := sp.Build(distStanzaPath, flagBuildDevelopment); err != nil {
 		log.Fatal(err)
 	}
 }

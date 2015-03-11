@@ -1,5 +1,6 @@
 function Stanza(execute) {
   var proto = Object.create(HTMLElement.prototype);
+  var development = descriptor.development;
 
   function createStanzaHelper(element) {
     return {
@@ -16,6 +17,9 @@ function Stanza(execute) {
         });
       },
       render: function(params) {
+        if (development) {
+          console.log("render()")
+        }
         var htmlTemplate = Handlebars.compile(descriptor.templates[params.template]);
         var htmlFragment = htmlTemplate(params.parameters);
         var selector = params.selector || "main";
