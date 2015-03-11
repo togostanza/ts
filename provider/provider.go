@@ -138,7 +138,11 @@ func (sp *StanzaProvider) RebuildIfRequired(distDir string, development bool) er
 }
 
 func (sp *StanzaProvider) buildStanzas(distDir string, development bool) error {
-	log.Println("building stanzas")
+	if development {
+		log.Println("building stanzas (development mode)")
+	} else {
+		log.Println("building stanzas (production mode)")
+	}
 	numBuilt := 0
 	for name, stanza := range sp.stanzas {
 		destStanzaBase := path.Join(distDir, name)
