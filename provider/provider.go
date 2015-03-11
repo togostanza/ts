@@ -186,9 +186,9 @@ func (sp *StanzaProvider) buildMetadata(distDir string) error {
 	defer w.Close()
 
 	stanzas := sp.Stanzas()
-	metadata := make([]stanza.Metadata, len(stanzas))
+	metadata := make([]interface{}, len(stanzas))
 	for i := range metadata {
-		metadata[i] = stanzas[i].Metadata
+		metadata[i] = stanzas[i].MetadataRaw
 	}
 
 	encoder := json.NewEncoder(w)

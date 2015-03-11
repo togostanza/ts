@@ -17,6 +17,7 @@ type Stanza struct {
 	BaseDir string
 	Name    string
 	Metadata
+	MetadataRaw interface{}
 }
 
 type Parameter struct {
@@ -58,6 +59,22 @@ func LoadMetadata(metadataPath string) (*Metadata, error) {
 	return &meta, nil
 }
 
+func LoadMetadataRaw(metadataPath string) (interface{}, error) {
+	f, err := os.Open(metadataPath)
+	if err != nil {
+		return nil, err
+	}
+	defer f.Close()
+
+	decoder := json.NewDecoder(f)
+	var meta interface{}
+	if err := decoder.Decode(&meta); err != nil {
+		return nil, err
+	}
+
+	return meta, nil
+}
+
 func NewStanza(baseDir, name string) (*Stanza, error) {
 	st := &Stanza{
 		BaseDir: baseDir,
@@ -71,6 +88,12 @@ func NewStanza(baseDir, name string) (*Stanza, error) {
 		return nil, err
 	}
 	st.Metadata = *meta
+
+	metaRaw, err := LoadMetadataRaw(st.MetadataPath())
+	if err != nil {
+		return nil, err
+	}
+	st.MetadataRaw = metaRaw
 
 	return st, nil
 }
