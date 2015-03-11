@@ -15,10 +15,9 @@
       <h1 class="page_ttl">{{.Metadata.Label|html}}</h1>
 
       <ul class="showcase_icn">
-        <li>Organism</li>
-        <li>Full stanza</li>
-        <li>Table</li>
-        <li>CC</li>
+        {{range .Tags}}
+        <li>{{.}}</li>
+        {{end}}
       </ul>
 
       <p class="lead">{{.Metadata.Definition|html}}</p>

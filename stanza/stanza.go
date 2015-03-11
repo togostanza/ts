@@ -32,6 +32,9 @@ type Metadata struct {
 	Parameters []Parameter `json:"stanza:parameters"`
 	Definition string      `json:"stanza:definition"`
 	Usage      string      `json:"stanza:usage"`
+	Context    string      `json:"stanza:context"`
+	Display    string      `json:"stanza:display"`
+	License    string      `json:"stanza:license"`
 }
 
 func (meta *Metadata) ParameterKeys() []string {
@@ -298,6 +301,23 @@ func (st *Stanza) buildIndexHtml(destStanzaBase string) error {
 	return nil
 }
 
+func (st *Stanza) Tags() []string {
+	tags := []string{}
+	meta := st.Metadata
+
+	if meta.Context != "" {
+		tags = append(tags, meta.Context)
+	}
+	if meta.Display != "" {
+		tags = append(tags, meta.Display)
+	}
+	if meta.License != "" {
+		tags = append(tags, meta.License)
+	}
+
+	return tags
+}
+
 func (st *Stanza) buildHelpHtml(destStanzaBase string) error {
 	tmpl := MustTemplateAsset("data/help.html")
 
@@ -317,10 +337,12 @@ func (st *Stanza) buildHelpHtml(destStanzaBase string) error {
 		Name       string
 		Metadata   Metadata
 		Stylesheet string
+		Tags       []string
 	}{
 		Name:       st.Name,
 		Metadata:   st.Metadata,
 		Stylesheet: string(stylesheet),
+		Tags:       st.Tags(),
 	}
 
 	if err := tmpl.Execute(w, context); err != nil {
