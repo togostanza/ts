@@ -303,7 +303,6 @@ func (st *Stanza) buildIndexHtml(destStanzaBase string, development bool) error 
 		IndexJs        string
 		DescriptorJson string
 		HeaderHtml     string
-		TsVersion      string
 	}{
 		StanzaJs:       string(stanzaJs),
 		IndexJs:        string(indexJs),
