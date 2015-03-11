@@ -1,6 +1,7 @@
 package provider
 
 import (
+	"encoding/json"
 	"fmt"
 	"log"
 	"os"
@@ -99,6 +100,9 @@ func (sp *StanzaProvider) build(distDir string) error {
 	if err := sp.buildList(distDir); err != nil {
 		return err
 	}
+	if err := sp.buildMetadata(distDir); err != nil {
+		return err
+	}
 
 	log.Println("built in", time.Since(t0))
 	return nil
@@ -165,6 +169,30 @@ func (sp *StanzaProvider) buildList(distDir string) error {
 	}
 
 	if err := tmpl.Execute(w, context); err != nil {
+		return err
+	}
+
+	log.Printf("generated %s", destPath)
+
+	return nil
+}
+
+func (sp *StanzaProvider) buildMetadata(distDir string) error {
+	destPath := path.Join(distDir, "metadata.json")
+	w, err := os.Create(destPath)
+	if err != nil {
+		return err
+	}
+	defer w.Close()
+
+	stanzas := sp.Stanzas()
+	metadata := make([]stanza.Metadata, len(stanzas))
+	for i := range metadata {
+		metadata[i] = stanzas[i].Metadata
+	}
+
+	encoder := json.NewEncoder(w)
+	if err := encoder.Encode(metadata); err != nil {
 		return err
 	}
 
