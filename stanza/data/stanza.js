@@ -2,10 +2,19 @@ function Stanza(execute) {
   var proto = Object.create(HTMLElement.prototype);
   var development = descriptor.development;
 
+  function template(name) {
+    var t = descriptor.templates[name];
+    if (!t) {
+      throw new Error("template \"" + name + "\" is not found");
+    }
+    return t;
+  }
+
   function createStanzaHelper(element) {
     return {
       query: function(params) {
-        var queryTemplate = Handlebars.compile(descriptor.templates[params.template], {noEscape: true});
+        var t = template(params.template);
+        var queryTemplate = Handlebars.compile(t, {noEscape: true});
         var query = queryTemplate(params.parameters);
 
         return $.ajax({
@@ -20,7 +29,8 @@ function Stanza(execute) {
         if (development) {
           console.log("render()")
         }
-        var htmlTemplate = Handlebars.compile(descriptor.templates[params.template]);
+        var t = template(params.template);
+        var htmlTemplate = Handlebars.compile(t);
         var htmlFragment = htmlTemplate(params.parameters);
         var selector = params.selector || "main";
         $(selector, element.shadowRoot).html(htmlFragment);
