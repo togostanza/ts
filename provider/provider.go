@@ -186,9 +186,16 @@ func (sp *StanzaProvider) buildMetadata(distDir string) error {
 	defer w.Close()
 
 	stanzas := sp.Stanzas()
-	metadata := make([]interface{}, len(stanzas))
-	for i := range metadata {
-		metadata[i] = stanzas[i].MetadataRaw
+	metadataArray := make([]interface{}, len(stanzas))
+	for i := range metadataArray {
+		metadataArray[i] = stanzas[i].MetadataRaw
+	}
+
+	metadata := map[string]interface{}{
+		"@context": map[string]string{
+			"stanza": "http://togostanza.org/resource/stanza#",
+		},
+		"stanza:stanzas": metadataArray,
 	}
 
 	encoder := json.NewEncoder(w)
