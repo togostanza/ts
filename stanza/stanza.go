@@ -21,10 +21,10 @@ type Stanza struct {
 }
 
 type Parameter struct {
-	Key         string `json:"stanza:key"`
-	Description string `json:"stanza:description"`
-	Example     string `json:"stanza:example"`
-	Required    bool   `json:"stanza:required"`
+	Key         string      `json:"stanza:key"`
+	Description string      `json:"stanza:description"`
+	Example     interface{} `json:"stanza:example"`
+	Required    bool        `json:"stanza:required"`
 }
 
 type Metadata struct {
