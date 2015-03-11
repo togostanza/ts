@@ -1,25 +1,61 @@
 function Stanza(execute) {
   var proto = Object.create(HTMLElement.prototype);
+  var development = descriptor.development;
+
+  function template(name) {
+    var t = descriptor.templates[name];
+    if (!t) {
+      throw new Error("template \"" + name + "\" is not found");
+    }
+    return t;
+  }
 
   function createStanzaHelper(element) {
     return {
       query: function(params) {
-        var queryTemplate = Handlebars.compile(descriptor.templates[params.template], {noEscape: true});
+        if (development) {
+          console.log("query: called", params);
+        }
+        var t = template(params.template);
+        var queryTemplate = Handlebars.compile(t, {noEscape: true});
         var query = queryTemplate(params.parameters);
 
-        return $.ajax({
+        if (development) {
+          console.log("query: query built:\n" + query);
+          console.log("query: sending to", params.endpoint);
+        }
+
+        var p = $.ajax({
           url: params.endpoint,
           data: {
             format: "json",
             query: query
           }
         });
+
+        if (development) {
+          p.then(function(value, textStatus) {
+            console.log("query:", textStatus, "data", value);
+          });
+        }
+
+        return p;
       },
       render: function(params) {
-        var htmlTemplate = Handlebars.compile(descriptor.templates[params.template]);
+        if (development) {
+          console.log("render: called", params)
+        }
+        var t = template(params.template);
+        var htmlTemplate = Handlebars.compile(t);
         var htmlFragment = htmlTemplate(params.parameters);
+        if (development) {
+          console.log("render: built:\n", htmlFragment)
+        }
         var selector = params.selector || "main";
         $(selector, element.shadowRoot).html(htmlFragment);
+        if (development) {
+          console.log("render: wrote to \"" + selector + "\"")
+        }
       },
       root: element.shadowRoot,
       select: function(selector) {

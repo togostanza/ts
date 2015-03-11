@@ -73,7 +73,7 @@ func (sp *StanzaProvider) Load() error {
 	return nil
 }
 
-func (sp *StanzaProvider) build(distDir string) error {
+func (sp *StanzaProvider) build(distDir string, development bool) error {
 	t0 := time.Now()
 
 	if err := sp.Load(); err != nil {
@@ -91,7 +91,7 @@ func (sp *StanzaProvider) build(distDir string) error {
 		return err
 	}
 
-	if err := sp.buildStanzas(distDir); err != nil {
+	if err := sp.buildStanzas(distDir, development); err != nil {
 		return err
 	}
 	if err := sp.extractAssets(distDir); err != nil {
@@ -108,20 +108,20 @@ func (sp *StanzaProvider) build(distDir string) error {
 	return nil
 }
 
-func (sp *StanzaProvider) Build(distDir string) error {
+func (sp *StanzaProvider) Build(distDir string, development bool) error {
 	lm, err := sp.LastModified()
 	if err != nil {
 		return err
 	}
 	sp.lastModified = lm
 
-	if err := sp.build(distDir); err != nil {
+	if err := sp.build(distDir, development); err != nil {
 		return err
 	}
 	return nil
 }
 
-func (sp *StanzaProvider) RebuildIfRequired(distDir string) error {
+func (sp *StanzaProvider) RebuildIfRequired(distDir string, development bool) error {
 	lm, err := sp.LastModified()
 	if err != nil {
 		return err
@@ -130,19 +130,23 @@ func (sp *StanzaProvider) RebuildIfRequired(distDir string) error {
 	if lm.After(sp.lastModified) {
 		sp.lastModified = lm
 		log.Println("update detected; rebuilding ...")
-		if err := sp.Build(distDir); err != nil {
+		if err := sp.Build(distDir, development); err != nil {
 			return err
 		}
 	}
 	return nil
 }
 
-func (sp *StanzaProvider) buildStanzas(distDir string) error {
-	log.Println("building stanzas")
+func (sp *StanzaProvider) buildStanzas(distDir string, development bool) error {
+	if development {
+		log.Println("building stanzas (development mode)")
+	} else {
+		log.Println("building stanzas (production mode)")
+	}
 	numBuilt := 0
 	for name, stanza := range sp.stanzas {
 		destStanzaBase := path.Join(distDir, name)
-		if err := stanza.Build(destStanzaBase); err != nil {
+		if err := stanza.Build(destStanzaBase, development); err != nil {
 			return err
 		}
 		numBuilt++
