@@ -8,7 +8,7 @@
   "stanza:parameter": [
   ],
   "stanza:usage": "<togostanza-{{.Name}}></togostanza-{{.Name}}>",
-  "stanza:type": "stanza:Stanza",
+  "stanza:type": "Stanza",
   "stanza:context": "",
   "stanza:display": "",
   "stanza:provider": "provider of this stanza",
