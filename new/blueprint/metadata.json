@@ -5,7 +5,7 @@
   "@id": "{{.Name|js}}",
   "stanza:label": "Hello Example",
   "stanza:definition": "Greeting.",
-  "stanza:parameters": [
+  "stanza:parameter": [
   ],
   "stanza:usage": "<togostanza-{{.Name}}></togostanza-{{.Name}}>",
   "stanza:type": "stanza:Stanza",

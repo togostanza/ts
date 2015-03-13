@@ -30,7 +30,7 @@ type Parameter struct {
 type Metadata struct {
 	Id         string      `json:"@id"`
 	Label      string      `json:"stanza:label"`
-	Parameters []Parameter `json:"stanza:parameters"`
+	Parameters []Parameter `json:"stanza:parameter"`
 	Definition string      `json:"stanza:definition"`
 	Usage      string      `json:"stanza:usage"`
 	Context    string      `json:"stanza:context"`
