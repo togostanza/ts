@@ -63,6 +63,77 @@ function Stanza(execute) {
       },
       selectAll: function(selector) {
         return this.root.querySelectorAll(selector);
+      },
+      grouping: function(rows /* , ...keys */) {
+        var _this = this;
+
+        var normalizedKeys = Array.prototype.slice.call(arguments, 1).reduce(function(acc, key) {
+          if (key instanceof Object) {
+            return acc.concat(
+              Object.keys(key).map(function(k) {
+                return [k, key[k]];
+              })
+            );
+          } else {
+            return acc.concat([[key, key]]);
+          }
+        }, []);
+
+        return (function(rows, keys) {
+          var callee = arguments.callee;
+          var key1   = keys[0];
+          var k1     = key1[0];
+          var a1     = key1[1];
+
+          if (keys.length === 1) return rows.map(function(row) { return row[k1] });
+
+          var key2 = keys[1];
+          var a2   = key2[1];
+
+          return _this.groupBy(rows, function(row) {
+            if (k1 instanceof Array) {
+              return k1.reduce(function(acc, k) {
+                acc[k] = row[k];
+              }, {});
+            } else {
+              return row[k1];
+            }
+          }).map(function(i) {
+            var ret = {};
+
+            ret[a1] = i[0];
+            ret[a2] = callee(i[1], keys.slice(1))
+
+            return ret;
+          });
+        })(rows, normalizedKeys);
+      },
+      groupBy: function(array, func) {
+        var ret = {};
+
+        array.forEach(function(item) {
+          var key  = func(item);
+          ret[key] = ret[key] || [];
+
+          ret[key].push(item);
+        });
+
+        return Object.keys(ret).map(function(key) {
+          return [key, ret[key]];
+        });
+      },
+      unwrapValueFromBinding: function(queryResult) {
+        var bindings = queryResult.results.bindings;
+
+        return bindings.map(function(binding) {
+          var ret = {};
+
+          Object.keys(binding).forEach(function(key) {
+            ret[key] = binding[key].value;
+          });
+
+          return ret;
+        });
       }
     };
   }
