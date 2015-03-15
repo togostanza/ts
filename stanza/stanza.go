@@ -346,11 +346,6 @@ func (st *Stanza) Tags() []string {
 func (st *Stanza) buildHelpHtml(destStanzaBase string) error {
 	tmpl := MustTemplateAsset("data/help.html")
 
-	stylesheet, err := Asset("data/help.css")
-	if err != nil {
-		return err
-	}
-
 	destPath := st.DestHelpHtmlPath(destStanzaBase)
 	w, err := os.Create(destPath)
 	if err != nil {
@@ -364,10 +359,9 @@ func (st *Stanza) buildHelpHtml(destStanzaBase string) error {
 		Stylesheet string
 		Tags       []string
 	}{
-		Name:       st.Name,
-		Metadata:   st.Metadata,
-		Stylesheet: string(stylesheet),
-		Tags:       st.Tags(),
+		Name:     st.Name,
+		Metadata: st.Metadata,
+		Tags:     st.Tags(),
 	}
 
 	if err := tmpl.Execute(w, context); err != nil {

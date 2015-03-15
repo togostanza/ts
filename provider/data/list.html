@@ -3,14 +3,21 @@
 <html>
   <head>
     <title>List of Stanzas</title>
-    <style>
-    </style>
+    <link rel="stylesheet" href="./assets/css/ts.css">
   </head>
 
   <body>
-  <h1>List of Stanzas</h1>
-  <ul>{{range .Stanzas}}
-    <li>{{.Name|html}} (<a href="{{.Name|html}}/help.html">help</a>)</li>{{end}}
-  </ul>
+  <div id="contents">
+    <h1 class="page_ttl">List of Stanzas</h1>
+    <div class="showcase_index">
+      {{range .Stanzas}}
+      <div class="list_item">
+        <div class="list_ttl">
+          <a href="{{.Name|html}}/help.html">{{.Name|html}}</a>
+        </div>
+      </div>
+      {{end}}
+    </div>
+  </div>
   </body>
 </html>
