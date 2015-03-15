@@ -80,10 +80,9 @@ function Stanza(execute) {
         return (function(rows, keys) {
           function fetch(row, key) {
             if (key instanceof Array) {
-              return key.reduce(function(acc, k) {
-                acc[k] = row[k];
-                return acc;
-              }, {});
+              return key.map(function(k) {
+                return row[k];
+              });
             } else {
               return row[currentKey.key]
             }
