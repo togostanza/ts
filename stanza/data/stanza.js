@@ -68,59 +68,66 @@ function Stanza(execute) {
         var _this = this;
 
         var normalizedKeys = Array.prototype.slice.call(arguments, 1).reduce(function(acc, key) {
-          if (key instanceof Object) {
-            return acc.concat(
-              Object.keys(key).map(function(k) {
-                return [k, key[k]];
-              })
-            );
+          if (key instanceof Array) {
+            return acc.concat({key: key, alias: key.join('_')});
+          } else if (key instanceof Object) {
+            return acc.concat(key);
           } else {
-            return acc.concat([[key, key]]);
+            return acc.concat({key: key, alias: key});
           }
         }, []);
 
         return (function(rows, keys) {
-          var callee = arguments.callee;
-          var key1   = keys[0];
-          var k1     = key1[0];
-          var a1     = key1[1];
-
-          if (keys.length === 1) return rows.map(function(row) { return row[k1] });
-
-          var key2 = keys[1];
-          var a2   = key2[1];
-
-          return _this.groupBy(rows, function(row) {
-            if (k1 instanceof Array) {
-              return k1.reduce(function(acc, k) {
+          function fetch(row, key) {
+            if (key instanceof Array) {
+              return key.reduce(function(acc, k) {
                 acc[k] = row[k];
+                return acc;
               }, {});
             } else {
-              return row[k1];
+              return row[currentKey.key]
             }
-          }).map(function(i) {
-            var ret = {};
+          }
 
-            ret[a1] = i[0];
-            ret[a2] = callee(i[1], keys.slice(1))
+          var callee     = arguments.callee;
+          var currentKey = keys[0];
+
+          if (keys.length === 1) return rows.map(function(row) { return fetch(row, currentKey.key) });
+
+          return _this.groupBy(rows, function(row) {
+            return fetch(row, currentKey.key);
+          }).map(function(group) {
+            var currentValue = group[0];
+            var remainValues = group[1];
+            var remainKeys   = keys.slice(1);
+            var nextKey      = remainKeys[0];
+            var ret          = {};
+
+            ret[currentKey.alias] = currentValue;
+            ret[nextKey.alias]    = callee(remainValues, remainKeys)
 
             return ret;
           });
         })(rows, normalizedKeys);
       },
       groupBy: function(array, func) {
-        var ret = {};
+        var ret = [];
 
         array.forEach(function(item) {
-          var key  = func(item);
-          ret[key] = ret[key] || [];
+          var key = func(item);
 
-          ret[key].push(item);
+          var entry = ret.filter(function(e) {
+            return e[0] === key;
+          })[0];
+
+          if (entry) {
+            entry[1].push(item);
+          } else {
+            ret.push([key, [item]]);
+          }
         });
 
-        return Object.keys(ret).map(function(key) {
-          return [key, ret[key]];
-        });
+        return ret;
       },
       unwrapValueFromBinding: function(queryResult) {
         var bindings = queryResult.results.bindings;
