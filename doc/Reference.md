@@ -90,7 +90,7 @@ The second argument, `parms`, is an object which contains parameters given to th
 
 ### metadata.json
 
-Describes the stanza, including the identifier of the stanza, human readable name of the stanza, what the stanza does, parameters, usage, license and author. See [TODO](#) for the metadata specification.
+Describes the stanza, including the identifier of the stanza, human readable name of the stanza, what the stanza does, parameters, usage, license and author.
 
 Example:
 
