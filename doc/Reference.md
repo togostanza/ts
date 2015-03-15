@@ -75,7 +75,7 @@ Holds assets (e.g., images). When you have `assets/example.png`, the asset is ac
 
 Defines behavior of the stanza.
 
-```
+```js
 // index.js
 Stanza(function(stanza, params) {
   // stanza
@@ -94,7 +94,7 @@ Describes the stanza, including the identifier of the stanza, human readable nam
 
 Example:
 
-```
+```json
 {
   "@context": {
     "stanza": "http://togostanza.org/resource/stanza#"
@@ -169,7 +169,7 @@ Groups an array of objects by specified keys.
 
 Example: Group objects values of `x` then `y`.
 
-```
+```js
 var ary = [
   {x: 1, y: 3},
   {x: 1, y: 4},
@@ -186,7 +186,7 @@ grouping(ary, "x", "y")
 
 Example: Use a composite key.
 
-```
+```js
 var ary = [
   {x: 1, y: 1, z: 3},
   {x: 1, y: 2, z: 4},
@@ -207,7 +207,7 @@ stanza.grouping(ary, ['x', 'y'], 'z');
 
 Example: Give an alias.
 
-```
+```js
 var ary = [
   {x: 1, y: 3},
   {x: 1, y: 4},
