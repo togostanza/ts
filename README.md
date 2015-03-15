@@ -14,7 +14,7 @@ Download latest release binary from https://github.com/togostanza/ts/releases. E
 
 ## Usage
 
-See https://github.com/togostanza/ts/wiki
+See [Getting Started](doc/Getting-Started.md) and [Reference](doc/Reference.md).
 
 
 ## Development
