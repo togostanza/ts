@@ -90,7 +90,7 @@ Look into the template:
 <p>{{greeting}}</p>
 ```
 
-Templates are written in [Handlebars](handlebarsjs.com).
+Templates are written in [Handlebars][].
 With `{{}}` notation, we can embed any values passed via `render()` function as `parameters`.
 
 ### Metadata
@@ -284,7 +284,7 @@ Add `gene_id` parameter to `stanza:parameter` and update `stanza:usage` to use t
 ### Create a query template
 
 Add a query template.
-Query templates are written in [Handlebars](handlebarsjs.com) as view templates.
+Query templates are written in [Handlebars][] as view templates.
 
 Put the following as `gene-fetures/templates/stanza.rq`:
 
@@ -407,10 +407,12 @@ The last part is the view template:
 
 It receives `features` from `index.js`.
 Note that we have used `{{#each <name>}}...{{/each}}` in order to iterate over `features`.
-See details in [Handlebars](http://handlebarsjs.com).
+See details in [Handlebars][].
 
 ### Run the stanza
 
 Everything is now set up.
 Open <http://localhost:8080/stanza/gene-features/help.html> with your browser.
 You will see that your stanza renders the result retrieved from the RDF store.
+
+  [Handlebars]: http://handlebarsjs.com/
