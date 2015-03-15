@@ -163,6 +163,65 @@ Returns a list of the elements within stanza's shadow DOM that match with `selec
 
 Shadow root of the stanza.
 
+### `stanza.grouping(ary, key1[, key2, ...])`
+
+Groups an array of objects by specified keys.
+
+Example: Group objects values of `x` then `y`.
+
+```
+var ary = [
+  {x: 1, y: 3},
+  {x: 1, y: 4},
+  {x: 2, y: 5},
+  {x: 2, y: 6}
+]
+
+grouping(ary, "x", "y")
+//=> [
+//     {x: 1, y: [3, 4]},
+//     {x: 2, y: [5, 6]}
+//   ]
+```
+
+Example: Use a composite key.
+
+```
+var ary = [
+  {x: 1, y: 1, z: 3},
+  {x: 1, y: 2, z: 4},
+  {x: 2, y: 1, z: 5},
+  {x: 2, y: 2, z: 6},
+  {x: 1, y: 2, z: 7},
+  {x: 2, y: 1, z: 8}
+];
+
+stanza.grouping(ary, ['x', 'y'], 'z');
+//=> [
+//     {x_y: [1, 1], z: [3]},
+//     {x_y: [1, 2], z: [4, 7]},
+//     {x_y: [2, 1], z: [5, 8]},
+//     {x_y: [2, 2], z: [6]}]
+//   ]
+```
+
+Example: Give an alias.
+
+```
+var ary = [
+  {x: 1, y: 3},
+  {x: 1, y: 4},
+  {x: 2, y: 5},
+  {x: 2, y: 6}
+];
+
+stanza.grouping(ary, {key: 'x', alias: 'z'}, 'y');
+//=> [
+//     {z: 1, y: [3, 4]},
+//     {z: 2, y: [5, 6]}
+//   ]
+```
+
 ## Embedding stanza
 
 ### Build and serve
