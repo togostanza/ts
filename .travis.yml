@@ -1,7 +1,7 @@
 language: go
 sudo: false
 go:
-- 1.4.2
+- 1.5.3
 install:
 - npm install -g bower
 - go get github.com/jteeuwen/go-bindata/...
@@ -26,4 +26,4 @@ deploy:
   on:
     repo: togostanza/ts
     tags: true
-    go: 1.4.2
+    go: 1.5.3
