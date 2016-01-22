@@ -23,7 +23,7 @@ func extractBlueprintAsset(dir, name string, params *parameters) error {
 
 	s := strings.SplitN(name, "/", 2)
 	if len(s) != 2 {
-		fmt.Errorf("unexpected name: %s", name)
+		return fmt.Errorf("unexpected name: %s", name)
 	}
 	destName := s[1]
 	err := os.MkdirAll(_filePath(dir, path.Dir(destName)), os.FileMode(0755))
