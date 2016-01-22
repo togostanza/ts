@@ -27,8 +27,10 @@ function Stanza(execute) {
 
         var p = $.ajax({
           url: params.endpoint,
+          headers: {
+            "Accept": "application/sparql-results+json"
+          },
           data: {
-            format: "json",
             query: query
           }
         });
