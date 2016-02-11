@@ -236,37 +236,37 @@ This stanza produces the same output as the previous version.
 
 ## Issue SPARQL query
 
-As for a more practical example, let's build a stanza to show features related to the specified gene. This is done by extracting information from an RDF store. We can use `stanza.query()` for this purpose in `index.js`.
+As for a more practical example, let's build a stanza to show organism name related to the specified tax_id. This is done by extracting information from an RDF store. We can use `stanza.query()` for this purpose in `index.js`.
 
 ### Create a stanza
 
 Generate another stanza for this example.
 
 ```sh
-$ ts new gene-features
+$ ts new organism-name
 ```
 
 ### Update `metadata.json`
 
-Add `gene_id` parameter to `stanza:parameter` and update `stanza:usage` to use the parameter in `metadata.json`:
+Add `tax_id` parameter to `stanza:parameter` and update `stanza:usage` to use the parameter in `metadata.json`:
 
 ```json
 {
   "@context": {
     "stanza": "http://togostanza.org/resource/stanza#"
   },
-  "@id": "gene-features",
+  "@id": "organism-name",
   "stanza:label": "Hello Example",
   "stanza:definition": "Greeting.",
   "stanza:parameter": [
     {
-      "stanza:key": "gene_id",
-      "stanza:example": "sll1098",
-      "stanza:description": "Gene identifier.",
+      "stanza:key": "tax_id",
+      "stanza:example": "1148",
+      "stanza:description": "NCBI taxonomy identifier.",
       "stanza:required": true
     }
   ],
-  "stanza:usage": "<togostanza-gene-features gene_id=\"sll1098\"></togostanza-gene-features>",
+  "stanza:usage": "<togostanza-organism-name tax_id=\"1148\"></togostanza-organism-name>",
   "stanza:type": "Stanza",
   "stanza:context": "",
   "stanza:display": "",
@@ -276,8 +276,8 @@ Add `gene_id` parameter to `stanza:parameter` and update `stanza:usage` to use t
   "stanza:address": "name@example.org",
   "stanza:contributor": [
   ],
-  "stanza:created": "2015-02-19",
-  "stanza:updated": "2015-02-19"
+  "stanza:created": "2016-02-11",
+  "stanza:updated": "2016-02-11"
 }
 ```
 
@@ -286,35 +286,32 @@ Add `gene_id` parameter to `stanza:parameter` and update `stanza:usage` to use t
 Add a query template.
 Query templates are written in [Handlebars][] as view templates.
 
-Put the following as `gene-fetures/templates/stanza.rq`:
+Put the following as `organism-name/templates/stanza.rq`:
 
 ```
-# gene-features/templates/stanza.rq
-PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
-PREFIX insdc: <http://ddbj.nig.ac.jp/ontologies/nucleotide/>
-SELECT DISTINCT ?feature_product ?feature_gene ?feature_gene_synonym
-WHERE {
-  ?s rdfs:label "{{gene_id}}" .
-  ?s insdc:product ?feature_product .
+# organism-name/templates/stanza.rq 
+PREFIX id-tax:<http://identifiers.org/taxonomy/>
+PREFIX ddbj-tax:<http://ddbj.nig.ac.jp/ontologies/taxonomy/>
 
-  OPTIONAL {
-    ?s insdc:gene  ?feature_gene .
-    ?s insdc:gene_synonym  ?feature_gene_synonym .
-  }
+SELECT ?scientific_name ?rank_name
+WHERE {
+  id-tax:{{tax_id}} ddbj-tax:scientificName ?scientific_name ;
+    ddbj-tax:rank ?rank .
+  ?rank rdfs:label ?rank_name .
 }
 ```
 
-Here, we have used `{{gene_id}}` to interpolate `gene_id` parameter.
+Here, we have used `{{tax_id}}` to interpolate `tax_id` parameter.
 
 ### Update `index.js`
 
 Now we are ready to issue the query. Write `index.js` as follows:
 
 ```javascript
-// gene-features/index.js
+// organism-name/index.js
 Stanza(function(stanza, params) {
   var q = stanza.query({
-    endpoint: "http://dev.togogenome.org/sparql-test",
+    endpoint: "http://togogenome.org/sparql-test",
     template: "stanza.rq",
     parameters: params
   });
@@ -324,14 +321,14 @@ Stanza(function(stanza, params) {
     stanza.render({
       template: "stanza.html",
       parameters: {
-        features: rows
+        organism: rows
       },
     });
   });
 });
 ```
 
-The function issues a SPARQL query to the specified `endpoint`. The query is built from `stanza.rq` template and `params` object. The parameters given to the `togostanza-gene-features` stanza, are directly passed into the query template because here we pass `params` as `parameters` of `query`.
+The function issues a SPARQL query to the specified `endpoint`. The query is built from `stanza.rq` template and `params` object. The parameters given to the `togostanza-organism-name` stanza, are directly passed into the query template because here we pass `params` as `parameters` of `query`.
 
 After the results are returned from the endpoint, the callback function of `q.then()` is called with the results. The `data` is an object that is returned from SPARQL endpoint such as:
 
@@ -340,9 +337,8 @@ After the results are returned from the endpoint, the callback function of `q.th
   "head": {
     "link": [],
     "vars": [
-      "feature_product",
-      "feature_gene",
-      "feature_gene_synonym"
+      "scientific_name",
+      "rank_name"
     ]
   },
   "results": {
@@ -350,39 +346,32 @@ After the results are returned from the endpoint, the callback function of `q.th
     "ordered": true,
     "bindings": [
       {
-        "feature_product": {
+        "scientific_name": {
           "type": "literal",
-          "value": "elongation factor G"
+          "value": "Synechocystis sp. PCC 6803"
         },
-        "feature_gene": {
+        "rank_name": {
           "type": "literal",
-          "value": "fus"
-        },
-        "feature_gene_synonym": {
-          "type": "literal",
-          "value": "fusA"
+          "value": "species"
         }
       }
     ]
   }
+}
 ```
 
-We extract `rows` from `data` first, then call `stanza.render()`, in order to render the result. `rows` are passed via `parameters` as `features`. `rows` corresponding to the above example of `data`, accessible as `features` in the template, are:
+We extract `rows` from `data` first, then call `stanza.render()`, in order to render the result. `rows` are passed via `parameters` as `organism`. `rows` corresponding to the above example of `data`, accessible as `organism` in the template, are:
 
 ```json
 [
   {
-    "feature_product": {
+    "scientific_name": {
       "type": "literal",
-      "value": "elongation factor G"
+      "value": "Synechocystis sp. PCC 6803"
     },
-    "feature_gene": {
+    "rank_name": {
       "type": "literal",
-      "value": "fus"
-    },
-    "feature_gene_synonym": {
-      "type": "literal",
-      "value": "fusA"
+      "value": "species"
     }
   }
 ]
@@ -395,24 +384,23 @@ We extract `rows` from `data` first, then call `stanza.render()`, in order to re
 The last part is the view template:
 
 ```
-<!-- gene-features/templates/stanza.html -->
-{{#each features}}
+<!-- organism-name/templates/stanza.html -->
+{{#each organism}}
 <dl>
-  <dt>Feature Product</dt><dd>{{feature_product.value}}</dd>
-  <dt>Feature Gene</dt><dd>{{feature_gene.value}}</dd>
-  <dt>Feature Gene Synonym</dt><dd>{{feature_gene_synonym.value}}</dd>
+  <dt>Scientific Name</dt><dd>{{scientific_name.value}}</dd>
+  <dt>Rank</dt><dd>{{rank_name.value}}</dd>
 </dl>
 {{/each}}
 ```
 
-It receives `features` from `index.js`.
-Note that we have used `{{#each <name>}}...{{/each}}` in order to iterate over `features`.
+It receives `organism` from `index.js`.
+Note that we have used `{{#each <name>}}...{{/each}}` in order to iterate over `organism`.
 See details in [Handlebars][].
 
 ### Run the stanza
 
 Everything is now set up.
-Open <http://localhost:8080/stanza/gene-features/help.html> with your browser.
+Open <http://localhost:8080/stanza/organism-name/help.html> with your browser.
 You will see that your stanza renders the result retrieved from the RDF store.
 
   [Handlebars]: http://handlebarsjs.com/
