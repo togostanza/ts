@@ -163,6 +163,37 @@ Returns a list of the elements within stanza's shadow DOM that match with `selec
 
 Shadow root of the stanza.
 
+### `stanza.unwrapValueFromBinding(result)`
+
+Unwraps an [SPARQL JSON Results Object][], returns simple Array of key-value objects.
+
+```js
+var result = {
+  "head": {"vars": ["s", "p", "o"]
+  },
+  "results": {
+    "bindings": [{
+      "s": {
+        "type": "uri",
+        "value": "http://example.com/s"
+      },
+      "p": {
+        "type": "uri",
+        "value": "http://example.com/p"
+      },
+      "o": {
+        "type": "uri",
+        "value": "http://example.com/o"
+      }
+    }]
+  }
+}
+unwrapValueFromBinding(result)
+//=> [
+//     {"s": "http://example.com/s", "p":"http://example.com/p", "o":"http://example.com/o"}
+//   ]
+```
+
 ### `stanza.grouping(ary, key1[, key2, ...])`
 
 Groups an array of objects by specified keys.
@@ -274,3 +305,4 @@ If your stanza takes some parameters, pass them as attributes:
 ```
 
   [handlebars]: http://handlebarsjs.com/
+  [SPARQL JSON Results Object]: https://www.w3.org/TR/sparql11-results-json/#json-result-object
