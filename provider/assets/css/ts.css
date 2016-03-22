@@ -595,3 +595,7 @@ a:hover {
   font-size: 14px;
   cursor: pointer;
 }
+
+.showcase_detail .explain {
+  margin-bottom: 12px;
+}
