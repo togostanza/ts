@@ -2,15 +2,15 @@
 
 ## Download `ts`
 
-Download latest release binary from https://github.com/togostanza/ts/releases.
+Download the latest binary release of `ts` from https://github.com/togostanza/ts/releases.
 
 ## Install `ts`
 
 Extract the archive and put `ts` binary into the directory that is in your `PATH`.
 
-## Creating stanza provider
+## Creating a stanza provider
 
-Crete a directory for a stanza provider, which contains stanzas.
+Crete a directory for a stanza provider. In this example, we'll be creating a directory named my_provider.
 
 ```sh
 $ mkdir my_provider
@@ -18,7 +18,7 @@ $ mkdir my_provider
 
 ## Scaffold a new stanza
 
-Move into the brand new stanza provider and generate a new stanza.
+Naviget to the my_provider direcotry and generate a new stanza named hello.
 
 ```sh
 $ cd my_provider
@@ -27,7 +27,7 @@ $ ts new hello
 
 ## See the stanza working
 
-Run `ts server` in the stanza provider directory to serve the stanza.
+Run `ts server` in the my_provider directory.
 This builds stanzas into `dist` directory and serve the files.
 
 ```sh
@@ -35,10 +35,10 @@ $ ts server
 ```
 
 Then, open <http://localhost:8080/stanza/> with your web browser.
-You will see the list of stanza available.
-At this moment, only `hello` should be listed.
+You will see the list of stanza names currently available (only the `hello` stanza will be shown at this moment).
+Each name is linked to the corresponding help page.
 
-Click "help" link of `hello` stanza.
+Click the "help" link of `hello` stanza.
 The description of `hello` stanza will appear.
 In the "Sample" section, you can see the stanza working and saying "hello, world!".
 
