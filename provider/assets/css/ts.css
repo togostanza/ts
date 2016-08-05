@@ -437,6 +437,7 @@ a:hover {
 .showcase_detail .showcase_id li dt {
   display: table-cell;
   width: 72px;
+  padding: 0 5px 0 0;
   font-size: 14px;
   font-weight: 700;
   vertical-align: middle;
@@ -449,7 +450,7 @@ a:hover {
 }
 .showcase_detail .showcase_id li dd .id_box {
   display: table-cell;
-  width: 191px;
+  width: 200px;
   padding: 0 5px 0 10px;
   color: #000;
   background-color: #fff;
