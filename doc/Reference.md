@@ -133,6 +133,7 @@ Issues SPARQL query. `options` is an object that has the following properties:
 <dt>endpoint</dt><dd>SPARQL endpoint.</dd>
 <dt>template</dt><dd>Template name for the query. Specify by the filename in `templates` directory.</dd>
 <dt>parameters<dt><dd>Parameters to pass to the query template.</dd>
+<dt>method<dt><dd>HTTP method to be used to issue the query. Specify `"GET"` or `"POST"` (Optional. Default is `"GET"`)</dd>
 </dl>
 
 The template is written in [Handlebars][].

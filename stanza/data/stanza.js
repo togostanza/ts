@@ -19,6 +19,7 @@ function Stanza(execute) {
         var t = template(params.template);
         var queryTemplate = Handlebars.compile(t, {noEscape: true});
         var query = queryTemplate(params.parameters);
+        var method = params.method || "GET";
 
         if (development) {
           console.log("query: query built:\n" + query);
@@ -26,6 +27,7 @@ function Stanza(execute) {
         }
 
         var p = $.ajax({
+          method: method,
           url: params.endpoint,
           headers: {
             "Accept": "application/sparql-results+json"
