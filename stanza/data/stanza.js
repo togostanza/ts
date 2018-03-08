@@ -19,31 +19,32 @@ function Stanza(execute) {
         var t = template(params.template);
         var queryTemplate = Handlebars.compile(t, {noEscape: true});
         var query = queryTemplate(params.parameters);
-        var method = params.method || "GET";
+        var data = new FormData();
+        data.set("query", query);
 
         if (development) {
           console.log("query: query built:\n" + query);
           console.log("query: sending to", params.endpoint);
         }
 
-        var p = $.ajax({
-          method: method,
-          url: params.endpoint,
+        var options = {
+          method: "POST",
           headers: {
             "Accept": "application/sparql-results+json"
           },
-          data: {
-            query: query
-          }
-        });
+          body: data,
+        };
+        var p = fetch(params.endpoint, options)
 
         if (development) {
-          p.then(function(value, textStatus) {
-            console.log("query:", textStatus, "data", value);
+          p.then(function(response) {
+            console.log("query:", response.statusText, response);
           });
         }
 
-        return p;
+        return p.then(function(response) {
+          return response.json();
+        });
       },
       render: function(params) {
         if (development) {
@@ -56,7 +57,7 @@ function Stanza(execute) {
           console.log("render: built:\n", htmlFragment)
         }
         var selector = params.selector || "main";
-        $(selector, element.shadowRoot).html(htmlFragment);
+        element.shadowRoot.querySelector(selector).innerHTML = htmlFragment;
         if (development) {
           console.log("render: wrote to \"" + selector + "\"")
         }

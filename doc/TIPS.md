@@ -2,16 +2,16 @@
 
 ## Using HTTP APIs from stanza
 
-If you want to use some external APIs, use `$.ajax` to call them as follows:
+If you want to use some external APIs, use `fetch` API to call them as follows:
 
 ```javascript
 Stanza(function(stanza, params) {
-  $.ajax({
+  var params = new URLSearchParams();
+  params.set('foo', 'hello, this is a query parameter');
+  fetch('http://example.com/example-api.json?' + params.toString(), {
     method: 'GET',
-    url: 'http://example.com/example-api.json',
-    data: {
-      foo: 'hello, this is a query parameter'
-    }
+  }).then(function(response) {
+    return response.json();
   }).then(function(data) {
     // Now you have `data`
     stanza.render({
