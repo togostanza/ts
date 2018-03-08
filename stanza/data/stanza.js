@@ -169,7 +169,9 @@ function Stanza(execute) {
 
       update(this);
     }
-
+    static get observedAttributes() {
+      return descriptor.parameters;
+    }
     attributeChangedCallback(attrName, oldVal, newVal) {
       var found = false;
       descriptor.parameters.forEach(function(key) {
