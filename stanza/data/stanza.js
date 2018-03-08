@@ -157,31 +157,33 @@ function Stanza(execute) {
     execute(createStanzaHelper(element), params);
   }
 
-  proto.createdCallback = function() {
-    var shadow = this.createShadowRoot();
+  class StanzaElement extends HTMLElement {
+    constructor() {
+      super();
+      var shadow = this.createShadowRoot();
+      var style = document.createElement("style");
+      style.appendChild(document.createTextNode(descriptor.stylesheet));
+      shadow.appendChild(style);
+      var main = document.createElement("main");
+      shadow.appendChild(main);
 
-    var style = document.createElement("style");
-    style.appendChild(document.createTextNode(descriptor.stylesheet));
-    shadow.appendChild(style);
-    var main = document.createElement("main");
-    shadow.appendChild(main);
-
-    update(this);
-  };
-
-  proto.attributeChangedCallback = function(attrName, oldVal, newVal) {
-    var found = false;
-    descriptor.parameters.forEach(function(key) {
-      if (attrName == key) {
-        found = true;
-      }
-    });
-    if (found) {
       update(this);
     }
-  };
 
-  document.registerElement(descriptor.elementName, {
-    prototype: proto
-  });
+    attributeChangedCallback(attrName, oldVal, newVal) {
+      var found = false;
+      descriptor.parameters.forEach(function(key) {
+        if (attrName == key) {
+          found = true;
+        }
+      });
+      if (found) {
+        update(this);
+      }
+    }
+  }
+
+  if ('customElements' in window && !window.customElements.get(descriptor.elementName)) {
+    window.customElements.define(descriptor.elementName, StanzaElement);
+  }
 };

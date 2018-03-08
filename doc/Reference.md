@@ -277,7 +277,7 @@ Thus we need polyfills, a kind of compatibility layer, provided by https://githu
 Include the following line in `<head></head>` of your html file:
 
 ```html
-<script src="https://example.org/stanza/assets/components/webcomponentsjs/webcomponents.min.js"></script>
+<script src="https://example.org/stanza/assets/components/webcomponentsjs/webcomponents-loader.js"></script>
 ```
 
 ### Import stanza

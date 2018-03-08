@@ -214,7 +214,13 @@ func (sp *StanzaProvider) buildMetadata(distDir string) error {
 
 func (sp *StanzaProvider) extractAssets(distStanzaPath string) error {
 	assetsToExtract := []string{
-		"assets/components/webcomponentsjs/webcomponents.min.js",
+		"assets/components/webcomponentsjs/webcomponents-loader.js",
+		"assets/components/webcomponentsjs/webcomponents-hi-ce.js",
+		"assets/components/webcomponentsjs/webcomponents-hi.js",
+		"assets/components/webcomponentsjs/webcomponents-lite.js",
+		"assets/components/webcomponentsjs/webcomponents-hi-sd.js",
+		"assets/components/webcomponentsjs/webcomponents-hi-sd-ce.js",
+		"assets/components/webcomponentsjs/webcomponents-sd-ce.js",
 		"assets/components/handlebars/handlebars.min.js",
 		"assets/css/ts.css",
 	}
