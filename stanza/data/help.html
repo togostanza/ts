@@ -29,7 +29,7 @@
 
                 <dd>
                   <p class="id_box">
-                    {{.Example|html}}
+                  <input type="text" value="{{.Example|html}}" onkeyup='handleUpdate("{{.Key|js}}", this)'>
 
                     {{if .Required}}
                       <span class="required">required</span>
@@ -58,4 +58,9 @@
         </div>
       </div>
   </body>
+  <script>
+    function handleUpdate(key, elem) {
+      document.querySelector("togostanza-{{.Metadata.Id|js}}").setAttribute(key, elem.value);
+    }
+  </script>
 </html>

@@ -599,3 +599,9 @@ a:hover {
 .showcase_detail .explain {
   margin-bottom: 12px;
 }
+
+.showcase_detail input {
+  border: 0;
+  padding: 0;
+  display: inline;
+}
