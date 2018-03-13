@@ -29,7 +29,7 @@
 
                 <dd>
                   <p class="id_box">
-                  <input type="text" value="{{.Example|html}}" onkeyup='handleUpdate("{{.Key|js}}", this)'>
+                    <input type="text" value="{{.Example|html}}" data-param-key="{{.Key|html}}">
 
                     {{if .Required}}
                       <span class="required">required</span>
@@ -57,10 +57,18 @@
           {{.Metadata.Usage}}
         </div>
       </div>
+      <script>
+        const stanza = document.querySelector('togostanza-{{.Metadata.Id|js}}');
+        const inputs = document.querySelectorAll('.showcase_id input');
+
+        inputs.forEach(function(input) {
+          const onParamChange = function() {
+            stanza.setAttribute(input.dataset.paramKey, input.value);
+          };
+
+          input.addEventListener('input', onParamChange);
+          onParamChange();
+        });
+      </script>
   </body>
-  <script>
-    function handleUpdate(key, elem) {
-      document.querySelector("togostanza-{{.Metadata.Id|js}}").setAttribute(key, elem.value);
-    }
-  </script>
 </html>
