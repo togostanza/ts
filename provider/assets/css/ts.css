@@ -602,6 +602,9 @@ a:hover {
 
 .showcase_detail input {
   border: 0;
+  font-size: 12px;
+  line-height: 14px;
+  outline: 0;
   padding: 0;
-  display: inline;
+  width: 135px;
 }
