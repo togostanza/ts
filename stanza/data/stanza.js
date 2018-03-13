@@ -160,7 +160,7 @@ function Stanza(execute) {
   class StanzaElement extends HTMLElement {
     constructor() {
       super();
-      var shadow = this.createShadowRoot();
+      var shadow = this.attachShadow({mode: "open"});
       var style = document.createElement("style");
       style.appendChild(document.createTextNode(descriptor.stylesheet));
       shadow.appendChild(style);
