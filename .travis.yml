@@ -14,6 +14,7 @@ script:
 - goxc -d dist -pv "$TS_VERSION"
 deploy:
   provider: releases
+  skip_cleanup: true
   api_key: ${GITHUB_API_KEY}
   file:
     - dist/$TS_VERSION/ts_${TS_VERSION}_darwin_386.zip
