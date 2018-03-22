@@ -18,7 +18,7 @@ $ mkdir my_provider
 
 ## Scaffold a new stanza
 
-Naviget to the my_provider direcotry and generate a new stanza named hello.
+Navigete to the my_provider directory and generate a new stanza named hello.
 
 ```sh
 $ cd my_provider
@@ -289,7 +289,7 @@ Query templates are written in [Handlebars][] as view templates.
 Put the following as `organism-name/templates/stanza.rq`:
 
 ```
-# organism-name/templates/stanza.rq 
+# organism-name/templates/stanza.rq
 PREFIX id-tax:<http://identifiers.org/taxonomy/>
 PREFIX ddbj-tax:<http://ddbj.nig.ac.jp/ontologies/taxonomy/>
 
