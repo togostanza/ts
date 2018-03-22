@@ -14,8 +14,7 @@ script:
 - goxc -d . -pv "$TS_VERSION"
 deploy:
   provider: releases
-  api_key:
-    secure: rhHF2pl5nucDEt0/pD4nkQGGll1VY8ftxuquTeJo6ybNgpCE9U/jx/hRLSZK2ldztsgD/WRzZCqYEJiCloPvyI32tSe75EwifIULeYyNdlspPi80jj5U6RhnBLlHD4q5Nu+izNe68iU1qjrQIkTIlCFmrzLQVn6LECh1TX4jXAg=
+  api_key: ${GITHUB_API_KEY}
   file:
     - $TS_VERSION/ts_${TS_VERSION}_darwin_386.zip
     - $TS_VERSION/ts_${TS_VERSION}_darwin_amd64.zip
