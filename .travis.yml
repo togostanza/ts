@@ -11,17 +11,17 @@ env:
 script:
 - bower install
 - go generate ./...
-- goxc -d . -pv "$TS_VERSION"
+- goxc -d dist -pv "$TS_VERSION"
 deploy:
   provider: releases
   api_key: ${GITHUB_API_KEY}
   file:
-    - $TS_VERSION/ts_${TS_VERSION}_darwin_386.zip
-    - $TS_VERSION/ts_${TS_VERSION}_darwin_amd64.zip
-    - $TS_VERSION/ts_${TS_VERSION}_linux_386.tar.gz
-    - $TS_VERSION/ts_${TS_VERSION}_linux_amd64.tar.gz
-    - $TS_VERSION/ts_${TS_VERSION}_windows_386.zip
-    - $TS_VERSION/ts_${TS_VERSION}_windows_amd64.zip
+    - dist/$TS_VERSION/ts_${TS_VERSION}_darwin_386.zip
+    - dist/$TS_VERSION/ts_${TS_VERSION}_darwin_amd64.zip
+    - dist/$TS_VERSION/ts_${TS_VERSION}_linux_386.tar.gz
+    - dist/$TS_VERSION/ts_${TS_VERSION}_linux_amd64.tar.gz
+    - dist/$TS_VERSION/ts_${TS_VERSION}_windows_386.zip
+    - dist/$TS_VERSION/ts_${TS_VERSION}_windows_amd64.zip
   on:
     repo: togostanza/ts
     tags: true
