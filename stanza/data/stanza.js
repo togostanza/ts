@@ -19,7 +19,7 @@ function Stanza(execute) {
         var t = template(params.template);
         var queryTemplate = Handlebars.compile(t, {noEscape: true});
         var query = queryTemplate(params.parameters);
-        var data = new FormData();
+        var data = new URLSearchParams();
         data.set("query", query);
 
         if (development) {
@@ -27,9 +27,11 @@ function Stanza(execute) {
           console.log("query: sending to", params.endpoint);
         }
 
+        // NOTE specifying Content-Type explicitly because some browsers sends `application/x-www-form-urlencoded;charset=UTF-8` without this, and some endpoints may not support this form.
         var options = {
           method: "POST",
           headers: {
+            "Content-Type": "application/x-www-form-urlencoded",
             "Accept": "application/sparql-results+json"
           },
           body: data,
