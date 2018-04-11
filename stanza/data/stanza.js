@@ -163,9 +163,6 @@ function Stanza(execute) {
     constructor() {
       super();
       var shadow = this.attachShadow({mode: "open"});
-      var style = document.createElement("style");
-      style.appendChild(document.createTextNode(descriptor.stylesheet));
-      shadow.appendChild(style);
       var main = document.createElement("main");
       shadow.appendChild(main);
 

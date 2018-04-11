@@ -260,11 +260,6 @@ func (st *Stanza) buildIndexHtml(destStanzaBase string, development bool) error 
 		return err
 	}
 
-	stylesheet, err := Asset("data/stanza.css")
-	if err != nil {
-		return err
-	}
-
 	stanzaJs, err := Asset("data/stanza.js")
 	if err != nil {
 		return err
@@ -279,13 +274,11 @@ func (st *Stanza) buildIndexHtml(destStanzaBase string, development bool) error 
 		Templates   map[string]string `json:"templates"`
 		Parameters  []string          `json:"parameters"`
 		ElementName string            `json:"elementName"`
-		Stylesheet  string            `json:"stylesheet"`
 		Development bool              `json:"development"`
 	}{
 		Templates:   templates,
 		Parameters:  st.Metadata.ParameterKeys(),
 		ElementName: st.ElementName(),
-		Stylesheet:  string(stylesheet),
 		Development: development,
 	}
 	descriptorJson, err := json.Marshal(descriptor)
