@@ -2,7 +2,11 @@
 
 <html>
   <head>
-    <script src="../assets/components/webcomponentsjs/webcomponents-loader.js"></script>
+    <meta charset="utf-8">
+    <script src="https://unpkg.com/@babel/polyfill@7.2.5/dist/polyfill.min.js"></script>
+    <script src="https://unpkg.com/@ungap/url-search-params@0.1.2/min.js"></script>
+    <script src="https://unpkg.com/whatwg-fetch@3.0.0/dist/fetch.umd.js"></script>
+    <script src="https://unpkg.com/@webcomponents/webcomponentsjs@1.3.0/webcomponents-loader.js"></script>
     <link rel="import" href="../{{.Name}}/">
     <link rel="stylesheet" href="../assets/css/ts.css">
     <title>{{.Metadata.Label|html}}</title>
@@ -61,7 +65,7 @@
         const stanza = document.querySelector('togostanza-{{.Metadata.Id|js}}');
         const inputs = document.querySelectorAll('.showcase_id input');
 
-        inputs.forEach(function(input) {
+        Array.prototype.forEach.call(inputs, function(input) {
           const onParamChange = function() {
             stanza.setAttribute(input.dataset.paramKey, input.value);
           };
@@ -70,5 +74,6 @@
           onParamChange();
         });
       </script>
+    </div>
   </body>
 </html>

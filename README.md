@@ -22,7 +22,7 @@ See [Getting Started](doc/Getting-Started.md) and [Reference](doc/Reference.md).
 TODO
 
 ```sh
-$ npm install -g bower
+$ npm install
 $ go get -u github.com/jteeuwen/go-bindata/...
 $ make
 ```

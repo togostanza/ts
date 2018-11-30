@@ -1,7 +1,0 @@
-{
-  "name": "togostanza",
-  "dependencies": {
-    "handlebars": "~4.0.0",
-    "webcomponentsjs": "~1.1.0"
-  }
-}

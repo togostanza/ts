@@ -1,8 +1,8 @@
 {{.HeaderHtml}}
-<script src="../assets/components/handlebars/handlebars.min.js"></script>
 <script>
-(function(descriptor) {
-  {{.StanzaJs}}
-  {{.IndexJs}}
-})({{.DescriptorJson}});
+  const descriptor = {{.DescriptorJson}};
+</script>
+<script src="../assets/js/stanza.js"></script>
+<script>
+{{.IndexJs}}
 </script>
