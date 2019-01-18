@@ -1,6 +1,6 @@
 default: install
 
 install:
-	bower install
+	npm run build
 	go generate ./...
 	go install .

@@ -1,3 +1,5 @@
 bindata.go
-/provider/assets/components
-/dist
+/provider/assets/components/
+/provider/assets/js/
+/dist/
+/node_modules/

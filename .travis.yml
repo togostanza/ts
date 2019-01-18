@@ -1,17 +1,18 @@
 language: go
 sudo: false
-go:
-- '1.10'
+go: '1.10'
 install:
-- npm install -g bower
+- nvm install --lts
+- npm ci
 - go get github.com/jteeuwen/go-bindata/...
 - go get github.com/laher/goxc
 env:
 - TS_VERSION=${TRAVIS_TAG#v}
 script:
-- bower install
+- npm run build
 - go generate ./...
 - goxc -d dist -pv "$TS_VERSION"
+cache: npm
 deploy:
   provider: releases
   skip_cleanup: true
