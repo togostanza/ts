@@ -12,15 +12,18 @@ export default function Stanza(execute) {
   }
 
   function createStanzaHelper(element) {
+    const handlebars = Handlebars.create();
+
     return {
       root: element.shadowRoot,
+      handlebars,
 
       query(params) {
         if (development) {
           console.log("query: called", params);
         }
         const t = template(params.template);
-        const queryTemplate = Handlebars.compile(t, {noEscape: true});
+        const queryTemplate = handlebars.compile(t, {noEscape: true});
         const query = queryTemplate(params.parameters);
         const data = new URLSearchParams();
         data.set("query", query);
@@ -53,7 +56,7 @@ export default function Stanza(execute) {
         }
 
         const t = template(params.template);
-        const htmlTemplate = Handlebars.compile(t);
+        const htmlTemplate = handlebars.compile(t);
         const htmlFragment = htmlTemplate(params.parameters);
 
         if (development) {
