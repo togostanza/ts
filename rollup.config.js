@@ -8,7 +8,7 @@ export default {
   output: {
     file: 'provider/assets/js/stanza.js',
     format: 'iife',
-    name: 'Stanza',
+    name: 'TogoStanza.initialize',
     sourcemap: true
   },
   plugins: [
