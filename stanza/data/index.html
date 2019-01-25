@@ -2,13 +2,17 @@
 
 <script src="../assets/js/stanza.js"></script>
 <script>
-  const descriptor = {{.DescriptorJson}};
+  (function() {
+    const descriptor = {{.DescriptorJson}};
 
-  if ('Promise' in window && 'URLSearchParams' in window && 'fetch' in window) {
-    {{.IndexJs}}
-  } else {
-    const element = document.querySelector(descriptor.elementName);
+    if ('Promise' in window && 'URLSearchParams' in window && 'fetch' in window) {
+      const Stanza = TogoStanza.initialize(descriptor);
 
-    element.textContent = 'Your Web browser does not support the features required for the stanza to work.';
-  }
+      {{.IndexJs}}
+    } else {
+      const element = document.querySelector(descriptor.elementName);
+
+      element.textContent = 'Your Web browser does not support the features required for the stanza to work.';
+    }
+  })();
 </script>
