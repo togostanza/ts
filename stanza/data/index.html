@@ -12,7 +12,7 @@
     } else {
       const element = document.querySelector(descriptor.elementName);
 
-      element.textContent = 'Your Web browser does not support the features required for the stanza to work.';
+      element.innerHTML = "<p>Your Web browser does not support the features required for the stanza to work. If you are using Internet Explorer 11, placing the following snippet before loading webcomponents-loader.js may resolve this issue:</p>\n<pre><code>&lt;script src=\"https://cdn.jsdelivr.net/combine/npm/@babel/polyfill@7.2.5/dist/polyfill.min.js,npm/@ungap/url-search-params@0.1.2/min.js,npm/whatwg-fetch@3.0.0/dist/fetch.umd.js\" crossorigin&gt;&lt;/script&gt;</code></pre>";
     }
   })();
 </script>

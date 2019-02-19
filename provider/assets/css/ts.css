@@ -401,8 +401,12 @@ a:hover {
   padding: 15px;
   background-color: #f5f4f3;
 }
-.showcase_box iframe {
-  width: 100%;
+
+.showcase_box pre {
+  margin-top: 6px;
+  font-family: monospace;
+  font-size: 12px;
+  word-wrap: break-word;
 }
 
 /* showcase_index */
