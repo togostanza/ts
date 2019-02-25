@@ -36,7 +36,7 @@ export default function initialize(descriptor) {
 
           // NOTE specifying Content-Type explicitly because some browsers sends `application/x-www-form-urlencoded;charset=UTF-8` without this, and some endpoints may not support this form.
           return fetch(params.endpoint, {
-            method: "POST",
+            method: params.method || "POST",
             headers: {
               "Content-Type": "application/x-www-form-urlencoded",
               "Accept": "application/sparql-results+json"
