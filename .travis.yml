@@ -1,6 +1,6 @@
 language: go
 sudo: false
-go: '1.11.5'
+go: '1.12'
 install:
 - nvm install --lts
 - npm ci
