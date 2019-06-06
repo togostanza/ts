@@ -5,10 +5,10 @@
   "license": "MIT",
   "scripts": {
     "build": "rollup -c && ./copy-webcomponentsjs.sh",
-    "start": "ts server -stanza-base-dir tmp/test-stanza-provider",
+    "start-test-server": "ts server -stanza-base-dir tmp/test-stanza-provider",
     "test-prepare": "make install && rm -rf tmp/test-stanza-provider && ts new -stanza-base-dir tmp/test-stanza-provider hello",
     "test": "cypress run",
-    "ci": "npm run test-prepare && start-server-and-test 8080"
+    "ci": "npm run test-prepare && start-server-and-test start-test-server 8080"
   },
   "devDependencies": {
     "@babel/core": "^7.3.3",
