@@ -4,17 +4,23 @@
   "repository": "https://github.com/togostanza/ts.git",
   "license": "MIT",
   "scripts": {
-    "build": "rollup -c && ./copy-webcomponentsjs.sh"
+    "build": "rollup -c && ./copy-webcomponentsjs.sh",
+    "start": "ts server -stanza-base-dir tmp/test-stanza-provider",
+    "test-prepare": "make install && rm -rf tmp/test-stanza-provider && ts new -stanza-base-dir tmp/test-stanza-provider hello",
+    "test": "cypress run",
+    "ci": "npm run test-prepare && start-server-and-test 8080"
   },
   "devDependencies": {
     "@babel/core": "^7.3.3",
     "@babel/preset-env": "^7.3.1",
     "@webcomponents/webcomponentsjs": "1.3.0",
+    "cypress": "^3.3.1",
     "handlebars": "^4.1.0",
     "rollup": "^1.2.2",
     "rollup-plugin-babel": "^4.3.2",
     "rollup-plugin-commonjs": "^9.2.0",
     "rollup-plugin-node-resolve": "^4.0.0",
-    "rollup-plugin-uglify": "^6.0.2"
+    "rollup-plugin-uglify": "^6.0.2",
+    "start-server-and-test": "^1.9.1"
   }
 }

@@ -9,6 +9,8 @@ install:
 env:
 - TS_VERSION=${TRAVIS_TAG#v}
 script:
+- npm run ci
+before_deploy:
 - npm run build
 - go generate ./...
 - goxc -d dist -pv "$TS_VERSION"
