@@ -3,3 +3,4 @@ bindata.go
 /provider/assets/js/
 /dist/
 /node_modules/
+/tmp/
