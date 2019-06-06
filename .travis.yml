@@ -11,8 +11,7 @@ env:
 script:
 - npm run ci
 before_deploy:
-- npm run build
-- go generate ./...
+- make install
 - goxc -d dist -pv "$TS_VERSION"
 cache: npm
 deploy:
