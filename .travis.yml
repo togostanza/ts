@@ -1,6 +1,10 @@
 language: go
 sudo: false
 go: '1.12'
+addons:
+  apt:
+    packages:
+      - libgconf-2.4 # workaround for cypress. see https://github.com/cypress-io/cypress/issues/4069#issuecomment-488315675
 install:
 - nvm install --lts
 - npm ci
