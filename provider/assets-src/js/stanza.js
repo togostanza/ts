@@ -1,4 +1,5 @@
 import Handlebars from 'handlebars/dist/handlebars';
+import debounce from 'lodash.debounce';
 
 export default function initialize(descriptor) {
   return function Stanza(execute) {
@@ -148,13 +149,11 @@ export default function initialize(descriptor) {
       };
     }
 
-    function update(element) {
-      const params = {};
-      descriptor.parameters.forEach((key) => {
-        params[key] = element.getAttribute(key);
-      });
+    const update = debounce((element) => {
+      const params = descriptor.parameters.reduce((acc, key) => Object.assign(acc, {[key]: element.getAttribute(key)}), {});
+
       execute(createStanzaHelper(element), params);
-    }
+    }, 50);
 
     class StanzaElement extends HTMLElement {
       constructor() {
@@ -172,15 +171,9 @@ export default function initialize(descriptor) {
       }
 
       attributeChangedCallback(attrName, oldVal, newVal) {
-        let found = false;
-        descriptor.parameters.forEach(function(key) {
-          if (attrName == key) {
-            found = true;
-          }
-        });
-        if (found) {
-          update(this);
-        }
+        if (!descriptor.parameters.includes(attrName)) { return; }
+
+        update(this);
       }
     }
 
