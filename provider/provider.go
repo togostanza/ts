@@ -7,6 +7,7 @@ import (
 	"os"
 	"path"
 	"path/filepath"
+	"sort"
 	"text/template"
 	"time"
 
@@ -253,6 +254,9 @@ func (sp *StanzaProvider) Stanzas() []*stanza.Stanza {
 		stanzas[i] = stanza
 		i++
 	}
+	sort.Slice(stanzas, func(i, j int) bool {
+		return stanzas[i].Name < stanzas[j].Name
+	})
 	return stanzas
 }
 
