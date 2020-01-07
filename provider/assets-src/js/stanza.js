@@ -1,6 +1,23 @@
 import Handlebars from 'handlebars/dist/handlebars';
 import debounce from 'lodash.debounce';
 
+function groupBy(array, func) {
+  const ret = [];
+
+  array.forEach((item) => {
+    const key   = func(item);
+    const entry = ret.filter((e) => e[0] === key)[0];
+
+    if (entry) {
+      entry[1].push(item);
+    } else {
+      ret.push([key, [item]]);
+    }
+  });
+
+  return ret;
+}
+
 export default function initialize(descriptor) {
   return function Stanza(execute) {
     const development = descriptor.development;
@@ -103,7 +120,7 @@ export default function initialize(descriptor) {
               return rows.map((row) => fetch(row, currentKey.key));
             }
 
-            return this.groupBy(rows, (row) => {
+            return groupBy(rows, (row) => {
               return fetch(row, currentKey.key);
             }).map(([currentValue, remainValues]) => {
               const nextKey = remainKeys[0];
@@ -116,22 +133,7 @@ export default function initialize(descriptor) {
           })(rows, normalizedKeys);
         },
 
-        groupBy(array, func) {
-          const ret = [];
-
-          array.forEach((item) => {
-            const key   = func(item);
-            const entry = ret.filter((e) => e[0] === key)[0];
-
-            if (entry) {
-              entry[1].push(item);
-            } else {
-              ret.push([key, [item]]);
-            }
-          });
-
-          return ret;
-        },
+        groupBy,
 
         unwrapValueFromBinding(queryResult) {
           const bindings = queryResult.results.bindings;
