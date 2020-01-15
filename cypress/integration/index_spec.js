@@ -19,7 +19,65 @@ describe("grouping", () => {
 
     cy.get("togostanza-grouping").then($root => {
       const main = $root[0].shadowRoot.querySelector("main");
-      expect(main.textContent).to.contain("Hello, grouping!");
+
+      expect(main.textContent).to.contain(JSON.stringify(
+        [
+          {
+            "x_y": [
+              1,
+              1
+            ],
+            "z": [
+              3
+            ]
+          },
+          {
+            "x_y": [
+              1,
+              2
+            ],
+            "z": [
+              4
+            ]
+          },
+          {
+            "x_y": [
+              2,
+              1
+            ],
+            "z": [
+              5
+            ]
+          },
+          {
+            "x_y": [
+              2,
+              2
+            ],
+            "z": [
+              6
+            ]
+          },
+          {
+            "x_y": [
+              1,
+              2
+            ],
+            "z": [
+              7
+            ]
+          },
+          {
+            "x_y": [
+              2,
+              1
+            ],
+            "z": [
+              8
+            ]
+          }
+        ]
+      ));
     });
   });
 });
