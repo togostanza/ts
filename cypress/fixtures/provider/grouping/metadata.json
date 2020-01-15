@@ -1,0 +1,22 @@
+{
+  "@context": {
+    "stanza": "http://togostanza.org/resource/stanza#"
+  },
+  "@id": "grouping",
+  "stanza:label": "Hello Example",
+  "stanza:definition": "Greeting.",
+  "stanza:parameter": [
+  ],
+  "stanza:usage": "<togostanza-grouping></togostanza-grouping>",
+  "stanza:type": "Stanza",
+  "stanza:context": "",
+  "stanza:display": "",
+  "stanza:provider": "provider of this stanza",
+  "stanza:license": "",
+  "stanza:author": "author name",
+  "stanza:address": "name@example.org",
+  "stanza:contributor": [
+  ],
+  "stanza:created": "2020-01-15",
+  "stanza:updated": "2020-01-15"
+}
