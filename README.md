@@ -26,3 +26,12 @@ $ npm install
 $ go get -u github.com/jteeuwen/go-bindata/...
 $ make
 ```
+
+### Integration test with Cypress
+
+* `yarn test-prepare`
+* `yarn start-test-server`
+
+Then, on another terminal,
+
+* `yarn test`
