@@ -13,7 +13,7 @@ install:
 env:
 - TS_VERSION=${TRAVIS_TAG#v}
 script:
-- npm run ci
+- npm test
 before_deploy:
 - make install
 - goxc -d dist -pv "$TS_VERSION"
