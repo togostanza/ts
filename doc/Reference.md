@@ -280,6 +280,8 @@ Include the following line in `<head></head>` of your html file:
 <script src="https://cdn.jsdelivr.net/npm/@webcomponents/webcomponentsjs@1.3.0/webcomponents-loader.js" crossorigin></script>
 ```
 
+Note: `ts` won't work with the newer version (2.x) of `webcomponentsjs`. Make sure to use the exact version.
+
 ### Import stanza
 
 Before using stanzas, you need to import the stanza. Include the following line in `<head>`.
